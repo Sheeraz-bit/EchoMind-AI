@@ -1,0 +1,1076 @@
+/* ============================================
+   CSS VARIABLES FOR PROPORTIONAL DESIGN
+   ============================================ */
+:root {
+    /* Spacing Scale - Based on 8px grid */
+    --space-1: 0.25rem;   /* 4px */
+    --space-2: 0.5rem;    /* 8px */
+    --space-3: 0.75rem;   /* 12px */
+    --space-4: 1rem;      /* 16px */
+    --space-5: 1.25rem;   /* 20px */
+    --space-6: 1.5rem;    /* 24px */
+    --space-7: 1.75rem;   /* 28px */
+    --space-8: 2rem;      /* 32px */
+    --space-9: 2.25rem;   /* 36px */
+    --space-10: 2.5rem;   /* 40px */
+    --space-12: 3rem;     /* 48px */
+    --space-14: 3.5rem;   /* 56px */
+    --space-16: 4rem;     /* 64px */
+    --space-20: 5rem;     /* 80px */
+    
+    /* Typography Scale */
+    --text-xs: 0.75rem;    /* 12px */
+    --text-sm: 0.875rem;   /* 14px */
+    --text-base: 1rem;     /* 16px */
+    --text-lg: 1.125rem;   /* 18px */
+    --text-xl: 1.25rem;    /* 20px */
+    --text-2xl: 1.5rem;    /* 24px */
+    --text-3xl: 1.875rem;  /* 30px */
+    --text-4xl: 2.25rem;   /* 36px */
+    --text-5xl: 3rem;      /* 48px */
+    
+    /* Border Radius */
+    --radius-sm: 0.25rem;  /* 4px */
+    --radius-md: 0.5rem;   /* 8px */
+    --radius-lg: 0.75rem;  /* 12px */
+    --radius-xl: 1rem;     /* 16px */
+    --radius-2xl: 1.5rem;  /* 24px */
+    --radius-full: 9999px; /* Full round */
+    
+    /* Colors */
+    --color-primary: #667eea;
+    --color-primary-dark: #5a67d8;
+    --color-secondary: #764ba2;
+    --color-success: #27ae60;
+    --color-danger: #e74c3c;
+    --color-warning: #f39c12;
+    --color-info: #3498db;
+    --color-light: #f8f9fa;
+    --color-dark: #2c3e50;
+    --color-gray: #6c757d;
+    --color-gray-light: #e9ecef;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
+    
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-base: 300ms ease;
+    --transition-slow: 500ms ease;
+}
+
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, var(--color-light) 0%, #e9ecef 100%);
+    min-height: 100vh;
+    color: var(--color-dark);
+    line-height: 1.6;
+    padding: var(--space-4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 1400px;
+    background: white;
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+}
+
+/* ============================================
+   HEADER - Proportional Design
+   ============================================ */
+.header {
+    text-align: center;
+    padding: var(--space-10) var(--space-8);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    color: white;
+}
+
+.header h1 {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-6);
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: var(--text-lg);
+    opacity: 0.9;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+    padding: 0 var(--space-4);
+}
+
+/* ============================================
+   MAIN CONTENT - Proportional Grid
+   ============================================ */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+    padding: var(--space-8);
+    flex: 1;
+}
+
+@media (max-width: 1200px) {
+    .main-content {
+        grid-template-columns: 1fr;
+        gap: var(--space-8);
+    }
+}
+
+/* ============================================
+   SECTIONS - Proportional Spacing
+   ============================================ */
+section {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--color-gray-light);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+section h2 {
+    font-size: var(--text-2xl);
+    color: var(--color-dark);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    font-weight: 600;
+    padding-bottom: var(--space-4);
+    border-bottom: 2px solid var(--color-gray-light);
+}
+
+/* ============================================
+   EMOTION SECTION - Proportional Layout
+   ============================================ */
+
+/* Emotion Container */
+.emotion-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+    margin-bottom: var(--space-6);
+}
+
+@media (max-width: 768px) {
+    .emotion-container {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+    }
+}
+
+/* Emotion Display Box */
+.emotion-display-box {
+    background: linear-gradient(135deg, var(--color-light) 0%, #e9ecef 100%);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    border: 2px solid var(--color-gray-light);
+    transition: all var(--transition-base);
+}
+
+.emotion-display-box:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+.emotion-icon-large {
+    width: 120px;
+    height: 120px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--space-16);
+    color: white;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-lg);
+}
+
+.emotion-main-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.emotion-main-info h3 {
+    font-size: var(--text-sm);
+    color: var(--color-gray);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.emotion-value-large {
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    color: var(--color-dark);
+    line-height: 1;
+}
+
+.confidence-display {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    background: white;
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-gray-light);
+    max-width: fit-content;
+}
+
+.confidence-label {
+    font-size: var(--text-sm);
+    color: var(--color-gray);
+}
+
+.confidence-value {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--color-success);
+}
+
+/* Emotion Controls Panel */
+.emotion-controls-panel {
+    background: var(--color-light);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    border: 2px solid var(--color-gray-light);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+.emotion-controls-panel h3 {
+    font-size: var(--text-xl);
+    color: var(--color-dark);
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Emotion Buttons - Proportional Grid */
+.emotion-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+}
+
+@media (max-width: 480px) {
+    .emotion-buttons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.emotion-btn {
+    padding: var(--space-5);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: var(--text-base);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    color: white;
+    min-height: 100px;
+}
+
+.emotion-btn i {
+    font-size: var(--text-2xl);
+}
+
+.emotion-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Emotion Button Colors */
+.happy-btn { background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%); }
+.sad-btn { background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); }
+.angry-btn { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); }
+.surprise-btn { background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); }
+.neutral-btn { background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%); }
+.fear-btn { background: linear-gradient(135deg, #d35400 0%, #a35200 100%); }
+
+/* Auto Mode Control */
+.auto-mode-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-5);
+    padding: var(--space-5);
+    background: white;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-gray-light);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: var(--transition-base);
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: var(--transition-base);
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.auto-mode-control span {
+    font-weight: 500;
+    color: var(--color-dark);
+    font-size: var(--text-base);
+}
+
+/* Emotion Statistics */
+.emotion-stats-container {
+    margin-top: var(--space-4);
+}
+
+.emotion-stats-container h3 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-6);
+    color: var(--color-dark);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+/* Emotion Bars */
+.emotion-bars {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+.emotion-bar-container {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+}
+
+.emotion-bar-label {
+    width: 140px;
+    font-weight: 500;
+    color: var(--color-dark);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--text-base);
+}
+
+.emotion-bar-label i {
+    font-size: var(--text-lg);
+    width: 28px;
+    text-align: center;
+}
+
+.emotion-bar {
+    flex: 1;
+    height: 24px;
+    background: var(--color-gray-light);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.emotion-bar-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width var(--transition-slow) cubic-bezier(0.34, 1.56, 0.64, 1);
+    width: 0%;
+}
+
+.emotion-bar-fill[data-emotion="happy"] {
+    background: linear-gradient(90deg, #f1c40f, #f39c12);
+}
+
+.emotion-bar-fill[data-emotion="sad"] {
+    background: linear-gradient(90deg, #3498db, #2980b9);
+}
+
+.emotion-bar-fill[data-emotion="angry"] {
+    background: linear-gradient(90deg, #e74c3c, #c0392b);
+}
+
+.emotion-bar-fill[data-emotion="surprise"] {
+    background: linear-gradient(90deg, #9b59b6, #8e44ad);
+}
+
+.emotion-bar-value {
+    width: 60px;
+    text-align: right;
+    font-weight: 600;
+    color: var(--color-dark);
+    font-size: var(--text-base);
+}
+
+/* ============================================
+   CHAT SECTION - Proportional Design
+   ============================================ */
+.chat-section {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 600px;
+}
+
+/* Chat Messages */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-6);
+    background: var(--color-light);
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    border: 1px solid var(--color-gray-light);
+    min-height: 400px;
+    max-height: 500px;
+}
+
+/* Message Styling */
+.message {
+    display: flex;
+    gap: var(--space-5);
+    max-width: 85%;
+    animation: messageAppear 0.3s ease-out;
+}
+
+@keyframes messageAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ai-message {
+    align-self: flex-start;
+}
+
+.user-message {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.message-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: var(--text-xl);
+    flex-shrink: 0;
+    box-shadow: var(--shadow-md);
+}
+
+.user-message .message-avatar {
+    background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%);
+}
+
+.message-content {
+    background: white;
+    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    max-width: 100%;
+    border: 1px solid var(--color-gray-light);
+    flex: 1;
+}
+
+.user-message .message-content {
+    background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%);
+    color: white;
+    border: none;
+}
+
+.message-sender {
+    font-weight: 600;
+    margin-bottom: var(--space-2);
+    color: var(--color-dark);
+    font-size: var(--text-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.user-message .message-sender {
+    color: white;
+    justify-content: flex-end;
+}
+
+.message-text {
+    margin-bottom: var(--space-2);
+    line-height: 1.6;
+    word-wrap: break-word;
+    font-size: var(--text-base);
+}
+
+.user-message .message-text {
+    text-align: right;
+}
+
+.message-time {
+    font-size: var(--text-xs);
+    color: var(--color-gray);
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-1);
+}
+
+.user-message .message-time {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Chat Input Area */
+.chat-input-area {
+    background: white;
+    padding: var(--space-6);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-gray-light);
+}
+
+.input-group {
+    display: flex;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+}
+
+#userInput {
+    flex: 1;
+    padding: var(--space-5);
+    border: 2px solid var(--color-gray-light);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-base);
+    font-family: 'Poppins', sans-serif;
+    transition: all var(--transition-base);
+    background: var(--color-light);
+    min-height: 56px;
+}
+
+#userInput:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+#userInput::placeholder {
+    color: var(--color-gray);
+}
+
+/* Buttons - Proportional Design */
+.btn {
+    padding: var(--space-4) var(--space-6);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-base);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    font-family: 'Poppins', sans-serif;
+    min-height: 56px;
+    min-width: 140px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+    background: var(--color-light);
+    color: var(--color-dark);
+    border: 1px solid var(--color-gray-light);
+}
+
+.btn-secondary:hover {
+    background: var(--color-gray-light);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-voice {
+    background: linear-gradient(135deg, var(--color-success) 0%, #2ecc71 100%);
+    color: white;
+    min-width: 160px;
+}
+
+.btn-voice:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Chat Controls */
+.chat-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-6);
+    gap: var(--space-6);
+}
+
+@media (max-width: 768px) {
+    .chat-controls {
+        flex-direction: column;
+        gap: var(--space-4);
+    }
+    
+    .chat-controls > * {
+        width: 100%;
+    }
+}
+
+.voice-control {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex: 1;
+}
+
+.voice-status {
+    flex: 1;
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-light);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--text-base);
+    border: 1px solid var(--color-gray-light);
+    min-height: 56px;
+}
+
+.voice-status i {
+    color: var(--color-success);
+    font-size: var(--text-sm);
+}
+
+.chat-actions {
+    display: flex;
+    gap: var(--space-4);
+}
+
+/* Current Context */
+.current-context {
+    display: flex;
+    gap: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-gray-light);
+    flex-wrap: wrap;
+}
+
+.context-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex: 1;
+    min-width: 200px;
+}
+
+.context-label {
+    font-size: var(--text-sm);
+    color: var(--color-gray);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.context-value {
+    padding: var(--space-2) var(--space-5);
+    background: var(--color-light);
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    color: var(--color-dark);
+    border: 1px solid var(--color-gray-light);
+    min-width: 120px;
+    text-align: center;
+    font-size: var(--text-base);
+    white-space: nowrap;
+}
+
+#currentEmotionDisplay {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    color: var(--color-primary);
+}
+
+#responseStyle {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.1) 0%, rgba(46, 204, 113, 0.1) 100%);
+    color: var(--color-success);
+}
+
+/* ============================================
+   FOOTER - Proportional Design
+   ============================================ */
+.footer {
+    text-align: center;
+    padding: var(--space-8);
+    background: var(--color-light);
+    border-top: 1px solid var(--color-gray-light);
+}
+
+.footer p {
+    margin-bottom: var(--space-4);
+    color: var(--color-gray);
+    font-size: var(--text-base);
+    line-height: 1.6;
+}
+
+.footer-info {
+    margin-top: var(--space-6);
+    padding: var(--space-5);
+    background: white;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-gray-light);
+    display: inline-block;
+    max-width: 800px;
+}
+
+.footer-info p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--color-gray);
+}
+
+/* ============================================
+   SCROLLBAR - Proportional Styling
+   ============================================ */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-gray-light);
+    border-radius: var(--radius-full);
+    margin: var(--space-1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    border-radius: var(--radius-full);
+    border: 3px solid var(--color-gray-light);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, #6a4198 100%);
+}
+
+/* ============================================
+   TYPING INDICATOR
+   ============================================ */
+.typing-indicator {
+    background: var(--color-light);
+    border: 2px dashed var(--color-gray-light);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.typing-dots {
+    display: flex;
+    gap: var(--space-2);
+    padding: var(--space-3) 0;
+}
+
+.typing-dots span {
+    width: 10px;
+    height: 10px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    border-radius: var(--radius-full);
+    animation: typingBounce 1.4s infinite ease-in-out both;
+}
+
+.typing-dots span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes typingBounce {
+    0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   PROPORTIONAL UTILITY CLASSES
+   ============================================ */
+
+/* Spacing Utilities */
+.m-1 { margin: var(--space-1); }
+.m-2 { margin: var(--space-2); }
+.m-3 { margin: var(--space-3); }
+.m-4 { margin: var(--space-4); }
+.m-5 { margin: var(--space-5); }
+.m-6 { margin: var(--space-6); }
+
+.p-1 { padding: var(--space-1); }
+.p-2 { padding: var(--space-2); }
+.p-3 { padding: var(--space-3); }
+.p-4 { padding: var(--space-4); }
+.p-5 { padding: var(--space-5); }
+.p-6 { padding: var(--space-6); }
+
+.gap-1 { gap: var(--space-1); }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+.gap-5 { gap: var(--space-5); }
+.gap-6 { gap: var(--space-6); }
+
+/* Text Utilities */
+.text-xs { font-size: var(--text-xs); }
+.text-sm { font-size: var(--text-sm); }
+.text-base { font-size: var(--text-base); }
+.text-lg { font-size: var(--text-lg); }
+.text-xl { font-size: var(--text-xl); }
+.text-2xl { font-size: var(--text-2xl); }
+.text-3xl { font-size: var(--text-3xl); }
+
+/* Flex Utilities */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+
+/* Grid Utilities */
+.grid { display: grid; }
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS - Proportional
+   ============================================ */
+@media (max-width: 1024px) {
+    :root {
+        --space-8: 1.75rem;
+        --space-10: 2rem;
+    }
+    
+    .header h1 {
+        font-size: var(--text-3xl);
+    }
+    
+    .subtitle {
+        font-size: var(--text-base);
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --space-6: 1.25rem;
+        --space-8: 1.5rem;
+    }
+    
+    .container {
+        margin: var(--space-2);
+        border-radius: var(--radius-xl);
+    }
+    
+    .header {
+        padding: var(--space-6);
+    }
+    
+    .header h1 {
+        font-size: var(--text-2xl);
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+    
+    .main-content {
+        padding: var(--space-6);
+        gap: var(--space-6);
+    }
+    
+    section {
+        padding: var(--space-6);
+    }
+    
+    .emotion-display-box {
+        flex-direction: column;
+        text-align: center;
+        padding: var(--space-6);
+    }
+    
+    .emotion-icon-large {
+        width: 100px;
+        height: 100px;
+        font-size: var(--space-12);
+    }
+    
+    .emotion-value-large {
+        font-size: var(--text-3xl);
+    }
+    
+    .btn {
+        padding: var(--space-3) var(--space-4);
+        min-height: 52px;
+        min-width: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: var(--space-2);
+    }
+    
+    :root {
+        --space-4: 0.875rem;
+        --space-6: 1rem;
+    }
+    
+    .header h1 {
+        font-size: var(--text-xl);
+    }
+    
+    .subtitle {
+        font-size: var(--text-sm);
+    }
+    
+    .main-content {
+        padding: var(--space-4);
+        gap: var(--space-4);
+    }
+    
+    section {
+        padding: var(--space-4);
+    }
+    
+    .emotion-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .emotion-btn {
+        min-height: 80px;
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: var(--space-4) var(--space-5);
+    }
+    
+    .current-context {
+        flex-direction: column;
+        gap: var(--space-4);
+    }
+    
+    .context-item {
+        min-width: 100%;
+    }
+}
