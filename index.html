@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Emotional Assistant - Proportional Design</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="flex items-center justify-center gap-4">
+                <i class="fas fa-robot"></i> 
+                <span>AI Emotional Assistant</span>
+            </h1>
+            <p class="subtitle">Proportional Design • Perfect Spacing • Professional Layout</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Column: Emotion Detection -->
+            <section class="emotion-section">
+                <h2 class="flex items-center gap-3">
+                    <i class="fas fa-smile-beam"></i>
+                    <span>Emotion Control Panel</span>
+                </h2>
+                
+                <div class="emotion-container">
+                    <!-- Emotion Display -->
+                    <div class="emotion-display-box">
+                        <div class="emotion-icon-large" id="mainEmotionIcon">
+                            <i class="fas fa-meh"></i>
+                        </div>
+                        <div class="emotion-main-info">
+                            <h3>CURRENT EMOTION STATE</h3>
+                            <div class="emotion-value-large" id="emotionValue">Neutral</div>
+                            <div class="confidence-display">
+                                <span class="confidence-label">Confidence:</span>
+                                <span class="confidence-value" id="confidenceValue">85%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Emotion Controls -->
+                    <div class="emotion-controls-panel">
+                        <h3>SELECT EMOTION</h3>
+                        <div class="emotion-buttons grid-cols-3">
+                            <button class="emotion-btn happy-btn" data-emotion="happy">
+                                <i class="fas fa-smile"></i>
+                                <span>Happy</span>
+                            </button>
+                            <button class="emotion-btn sad-btn" data-emotion="sad">
+                                <i class="fas fa-frown"></i>
+                                <span>Sad</span>
+                            </button>
+                            <button class="emotion-btn angry-btn" data-emotion="angry">
+                                <i class="fas fa-angry"></i>
+                                <span>Angry</span>
+                            </button>
+                            <button class="emotion-btn surprise-btn" data-emotion="surprise">
+                                <i class="fas fa-surprise"></i>
+                                <span>Surprise</span>
+                            </button>
+                            <button class="emotion-btn neutral-btn" data-emotion="neutral">
+                                <i class="fas fa-meh"></i>
+                                <span>Neutral</span>
+                            </button>
+                            <button class="emotion-btn fear-btn" data-emotion="fear">
+                                <i class="fas fa-flushed"></i>
+                                <span>Fear</span>
+                            </button>
+                        </div>
+                        
+                        <div class="auto-mode-control">
+                            <label class="switch">
+                                <input type="checkbox" id="autoEmotionToggle">
+                                <span class="slider"></span>
+                            </label>
+                            <span>Auto Emotion Rotation</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Emotion Statistics -->
+                <div class="emotion-stats-container">
+                    <h3 class="flex items-center gap-2">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Emotion Intensity Analysis</span>
+                    </h3>
+                    <div class="emotion-bars">
+                        <div class="emotion-bar-container">
+                            <div class="emotion-bar-label">
+                                <i class="fas fa-smile"></i>
+                                <span>Happiness</span>
+                            </div>
+                            <div class="emotion-bar">
+                                <div class="emotion-bar-fill" id="happyBar" data-emotion="happy"></div>
+                            </div>
+                            <div class="emotion-bar-value" id="happyValue">40%</div>
+                        </div>
+                        <div class="emotion-bar-container">
+                            <div class="emotion-bar-label">
+                                <i class="fas fa-frown"></i>
+                                <span>Sadness</span>
+                            </div>
+                            <div class="emotion-bar">
+                                <div class="emotion-bar-fill" id="sadBar" data-emotion="sad"></div>
+                            </div>
+                            <div class="emotion-bar-value" id="sadValue">20%</div>
+                        </div>
+                        <div class="emotion-bar-container">
+                            <div class="emotion-bar-label">
+                                <i class="fas fa-angry"></i>
+                                <span>Anger</span>
+                            </div>
+                            <div class="emotion-bar">
+                                <div class="emotion-bar-fill" id="angryBar" data-emotion="angry"></div>
+                            </div>
+                            <div class="emotion-bar-value" id="angryValue">10%</div>
+                        </div>
+                        <div class="emotion-bar-container">
+                            <div class="emotion-bar-label">
+                                <i class="fas fa-surprise"></i>
+                                <span>Surprise</span>
+                            </div>
+                            <div class="emotion-bar">
+                                <div class="emotion-bar-fill" id="surpriseBar" data-emotion="surprise"></div>
+                            </div>
+                            <div class="emotion-bar-value" id="surpriseValue">15%</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Chat Interface -->
+            <section class="chat-section">
+                <h2 class="flex items-center gap-3">
+                    <i class="fas fa-comments"></i>
+                    <span>AI Conversation</span>
+                </h2>
+                
+                <div class="chat-container">
+                    <!-- Chat Messages -->
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message ai-message">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-sender flex items-center gap-2">
+                                    <i class="fas fa-robot"></i>
+                                    <span>AI Assistant</span>
+                                </div>
+                                <div class="message-text">Welcome! This interface features proportional CSS design with perfect spacing and alignment. You can select emotions on the left and chat with me here.</div>
+                                <div class="message-time flex items-center justify-end gap-1">
+                                    <i class="far fa-clock"></i>
+                                    <span>Just now</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input Area -->
+                    <div class="chat-input-area">
+                        <div class="input-group">
+                            <input type="text" id="userInput" placeholder="Type your message here..." autocomplete="off">
+                            <button id="sendButton" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>Send</span>
+                            </button>
+                        </div>
+                        
+                        <div class="chat-controls">
+                            <div class="voice-control flex items-center gap-4">
+                                <button id="voiceButton" class="btn btn-voice">
+                                    <i class="fas fa-microphone"></i>
+                                    <span>Voice Input</span>
+                                </button>
+                                <div class="voice-status" id="voiceStatus">
+                                    <i class="fas fa-circle"></i>
+                                    <span>Voice recognition ready</span>
+                                </div>
+                            </div>
+                            
+                            <div class="chat-actions flex gap-3">
+                                <button id="clearChat" class="btn btn-secondary">
+                                    <i class="fas fa-trash-alt"></i>
+                                    <span>Clear Chat</span>
+                                </button>
+                                <button id="suggestTopic" class="btn btn-secondary">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <span>Suggest Topic</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="current-context flex gap-6">
+                            <div class="context-item flex items-center gap-3">
+                                <span class="context-label">Current Emotion:</span>
+                                <span class="context-value" id="currentEmotionDisplay">Neutral</span>
+                            </div>
+                            <div class="context-item flex items-center gap-3">
+                                <span class="context-label">Response Style:</span>
+                                <span class="context-value" id="responseStyle">Professional</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Proportional CSS Design System • Perfect Spacing • Consistent Layout</p>
+            <div class="footer-info">
+                <p class="flex items-center justify-center gap-2">
+                    <i class="fas fa-info-circle"></i>
+                    <span>This design uses CSS variables for proportional spacing and typography.</span>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
