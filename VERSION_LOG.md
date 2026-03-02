@@ -2,202 +2,201 @@
 
 ## 📱 Version 3.0.0 - Mobile Optimization & Enhanced UI (Current)
 
-*Released: March 2, 2026*
+_Released: March 2, 2026_
 
 ### 🚀 Major Improvements
 
--   **Complete mobile responsiveness overhaul**
--   Fixed Android voice recognition issues
--   Added mobile-specific response system
--   Optimized touch targets for all devices
+- **Complete mobile responsiveness overhaul**
+- Fixed Android voice recognition issues
+- Added mobile-specific response system
+- Optimized touch targets for all devices
 
 ### ✨ New Features
 
--   Mobile-optimized chat responses (shorter, engaging replies)
--   Device detection for tailored user experience
--   Enhanced fallback response system
--   Jokes and facts library for engaging conversation
--   Better error handling for mobile browsers
+- Mobile-optimized chat responses (shorter, engaging replies)
+- Device detection for tailored user experience
+- Enhanced fallback response system
+- Jokes and facts library for engaging conversation
+- Better error handling for mobile browsers
 
 ### 🐛 Bug Fixes
 
--   Fixed generic AI response on mobile ("Artificial Intelligence
-    represents...")
--   Resolved speech synthesis crashes on Android
--   Fixed API endpoint issues on Render deployment
--   Corrected duplicate sendMessage function conflict
--   Improved voice loading on mobile devices
+- Fixed generic AI response on mobile ("Artificial Intelligence
+  represents...")
+- Resolved speech synthesis crashes on Android
+- Fixed API endpoint issues on Render deployment
+- Corrected duplicate sendMessage function conflict
+- Improved voice loading on mobile devices
 
 ### 🎨 UI Enhancements
 
--   Better touch feedback on mobile
--   Optimized spacing for small screens
--   Improved animation performance on mobile
--   Larger touch targets for emotion buttons
+- Better touch feedback on mobile
+- Optimized spacing for small screens
+- Improved animation performance on mobile
+- Larger touch targets for emotion buttons
 
 ### 📊 Stats
 
--   Lines of code: \~2,500
--   Mobile compatibility: 100%
--   Voice success rate: 95%
+- Lines of code: \~2,500
+- Mobile compatibility: 100%
+- Voice success rate: 95%
 
-------------------------------------------------------------------------
+---
 
 ## 🚀 Version 2.1.0 - Voice Enhancement & Bug Fixes
 
-*Released: March 1, 2026*
+_Released: March 1, 2026_
 
 ### ✨ New Features
 
--   Enhanced voice system with emotion-based modulation
--   Added premium voice selection (Google UK Female, Microsoft Hazel)
--   Voice pitch and rate adapts to emotional context
--   Better speech synthesis error handling
+- Enhanced voice system with emotion-based modulation
+- Added premium voice selection (Google UK Female, Microsoft Hazel)
+- Voice pitch and rate adapts to emotional context
+- Better speech synthesis error handling
 
 ### 🐛 Bug Fixes
 
--   Fixed speech recognition permission issues
--   Resolved voice cutoff on long responses
--   Improved error messages for voice input
--   Fixed microphone access on iOS
+- Fixed speech recognition permission issues
+- Resolved voice cutoff on long responses
+- Improved error messages for voice input
+- Fixed microphone access on iOS
 
 ### 🎨 UI Enhancements
 
--   Added voice status indicators
--   Improved voice button feedback
--   Better error messaging for voice features
+- Added voice status indicators
+- Improved voice button feedback
+- Better error messaging for voice features
 
-------------------------------------------------------------------------
+---
 
 ## 🎨 Version 2.0.0 - Major UI Overhaul with 3D Effects
 
-*Released: February 28, 2026*
+_Released: February 28, 2026_
 
 ### ✨ New Features
 
--   **3D Animations** - Morphing shapes and floating particles
--   **Glass Morphism** - Modern frosted glass effects
--   **Living Interface** - Animated backgrounds and icons
--   **Bouncy Transitions** - Smooth hover effects with custom easing
--   **AOS Integration** - Scroll-based animations
+- **3D Animations** - Morphing shapes and floating particles
+- **Glass Morphism** - Modern frosted glass effects
+- **Living Interface** - Animated backgrounds and icons
+- **Bouncy Transitions** - Smooth hover effects with custom easing
+- **AOS Integration** - Scroll-based animations
 
 ### 🎨 UI Enhancements
 
--   Complete visual redesign
--   Gradient text and backgrounds
--   Animated emotion icons
--   Particle background system
--   Enhanced progress bars with shimmer effects
--   Better typography scaling
+- Complete visual redesign
+- Gradient text and backgrounds
+- Animated emotion icons
+- Particle background system
+- Enhanced progress bars with shimmer effects
+- Better typography scaling
 
 ### 🐛 Bug Fixes
 
--   Improved responsive breakpoints
--   Fixed animation performance issues
--   Better cross-browser compatibility
+- Improved responsive breakpoints
+- Fixed animation performance issues
+- Better cross-browser compatibility
 
-------------------------------------------------------------------------
+---
 
 ## 🎤 Version 1.1.0 - Voice Recognition & API Integration
 
-*Released: February 27, 2026*
+_Released: February 27, 2026_
 
 ### ✨ New Features
 
--   **Voice Input Support** - Speech recognition for hands-free
-    interaction
--   **OpenRouter API Integration** - Enhanced AI responses
--   **Conversation History** - Track chat context
--   **Topic Suggestions** - AI-powered conversation starters
+- **Voice Input Support** - Speech recognition for hands-free
+  interaction
+- **OpenRouter API Integration** - Enhanced AI responses
+- **Conversation History** - Track chat context
+- **Topic Suggestions** - AI-powered conversation starters
 
 ### 🐛 Bug Fixes
 
--   Fixed CORS issues with API
--   Improved error handling for network failures
--   Better fallback responses when API unavailable
+- Fixed CORS issues with API
+- Improved error handling for network failures
+- Better fallback responses when API unavailable
 
-------------------------------------------------------------------------
+---
 
 ## 🌟 Version 1.0.0 - Initial Release
 
-*Released: February 26, 2026*
+_Released: February 26, 2026_
 
 ### ✨ Core Features
 
--   Basic emotion detection interface
--   Manual emotion selection (Happy, Sad, Angry, Surprise, Neutral,
-    Fear)
--   Chat interface with AI responses
--   Emotion intensity bars
--   Auto-emotion rotation mode
--   Proportional CSS design system
+- Basic emotion detection interface
+- Manual emotion selection (Happy, Sad, Angry, Surprise, Neutral,
+  Fear)
+- Chat interface with AI responses
+- Emotion intensity bars
+- Auto-emotion rotation mode
+- Proportional CSS design system
 
 ### 🛠️ Technical Foundation
 
--   Express.js backend server
--   Vanilla JavaScript frontend
--   CSS variables for proportional spacing
--   8px grid system
--   Responsive layout foundation
+- Express.js backend server
+- Vanilla JavaScript frontend
+- CSS variables for proportional spacing
+- 8px grid system
+- Responsive layout foundation
 
 ### 📁 Initial File Structure
 
 EchoMind-AI/ ├── server.js ├── public/ │ ├── index.html │ ├── style.css
 │ └── script.js ├── .env └── package.json
 
-------------------------------------------------------------------------
+---
 
 ## 🔮 Planned for Version 4.0
 
--   [ ] Real face detection emotion recognition
--   [ ] Multiple language support
--   [ ] User accounts and conversation saving
--   [ ] Custom voice model integration
--   [ ] Dark/light theme toggle
--   [ ] PWA support for offline use
--   [ ] Export conversation feature
+- [ ] Real face detection emotion recognition
+- [ ] Multiple language support
+- [ ] User accounts and conversation saving
+- [ ] Custom voice model integration
+- [ ] Dark/light theme toggle
+- [ ] PWA support for offline use
+- [ ] Export conversation feature
 
-------------------------------------------------------------------------
+---
 
 ## 📊 Version Comparison
 
-  Feature                    v1.0   v2.0   v2.1   v3.0
-  -------------------------- ------ ------ ------ ------
-  Basic Chat                 ✅     ✅     ✅     ✅
-  Emotion Selection          ✅     ✅     ✅     ✅
-  Voice Input                ❌     ❌     ✅     ✅
-  Voice Output               ❌     ❌     ✅     ✅
-  3D Animations              ❌     ✅     ✅     ✅
-  Mobile Optimized           ❌     ⚠️     ⚠️     ✅
-  Jokes & Facts              ❌     ❌     ❌     ✅
-  Emotion Voice Modulation   ❌     ❌     ✅     ✅
-  Glass Morphism             ❌     ✅     ✅     ✅
-  Particle Effects           ❌     ✅     ✅     ✅
+| Feature                  | v1.0 | v2.0 | v2.1 | v3.0 |
+| ------------------------ | :--: | :--: | :--: | :--: |
+| Basic Chat               |  ✅  |  ✅  |  ✅  |  ✅  |
+| Emotion Selection        |  ✅  |  ✅  |  ✅  |  ✅  |
+| Voice Input              |  ❌  |  ❌  |  ✅  |  ✅  |
+| Voice Output             |  ❌  |  ❌  |  ✅  |  ✅  |
+| 3D Animations            |  ❌  |  ✅  |  ✅  |  ✅  |
+| Mobile Optimized         |  ❌  |  ⚠️  |  ⚠️  |  ✅  |
+| Jokes & Facts            |  ❌  |  ❌  |  ❌  |  ✅  |
+| Emotion Voice Modulation |  ❌  |  ❌  |  ✅  |  ✅  |
+| Glass Morphism           |  ❌  |  ✅  |  ✅  |  ✅  |
+| Particle Effects         |  ❌  |  ✅  |  ✅  |  ✅  |
 
-------------------------------------------------------------------------
+---
 
 ## 🐛 Known Issues (Version 3.0)
 
--   **iOS Safari** - Minor voice delay on first use
--   **Firefox Mobile** - Speech synthesis requires user interaction
-    first
--   **Low-end Android** - Animations may stutter on very old devices
+- **iOS Safari** - Minor voice delay on first use
+- **Firefox Mobile** - Speech synthesis requires user interaction
+  first
+- **Low-end Android** - Animations may stutter on very old devices
 
-------------------------------------------------------------------------
+---
 
 ## 📝 Changelog Tags
 
--   `✨ New Feature` - Brand new functionality
--   `🎨 UI/UX` - Visual and experience improvements
--   `🐛 Bug Fix` - Problem resolution
--   `🚀 Performance` - Speed and optimization
--   `📱 Mobile` - Mobile-specific updates
--   `🔧 Technical` - Code architecture improvements
+- `✨ New Feature` - Brand new functionality
+- `🎨 UI/UX` - Visual and experience improvements
+- `🐛 Bug Fix` - Problem resolution
+- `🚀 Performance` - Speed and optimization
+- `📱 Mobile` - Mobile-specific updates
+- `🔧 Technical` - Code architecture improvements
 
-------------------------------------------------------------------------
+---
 
-::: {align="center"}
-`<sub>`{=html}EchoMind AI - Evolving emotional intelligence since
-2026`</sub>`{=html} `<br/>`{=html} `<sub>`{=html}⭐ Star us on GitHub if
-you find this project useful!`</sub>`{=html}
-:::
+<p align="center">
+<sub>EchoMind AI - Evolving emotional intelligence since 2026</sub>  
+<sub>⭐ Star us on GitHub if you find this project useful!</sub>
+</p>
