@@ -136,7 +136,7 @@ _Without API key, the system uses enhanced local responses_
 
 ## 📊 Version History 
 
-<a herf="./VERSION_LOG.md" > Version Logs </a>
+<a herf="./VERSION_LOG.md">Version Logs</a> <a href="https://www.w3schools.com">Visit W3Schools.com!</a>
 
 ### Version Evolution
 
