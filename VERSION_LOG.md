@@ -163,6 +163,7 @@ _Released: February 26, 2026_
 - [x] Dark/light theme toggle
 - [ ] PWA support for offline use
 - [ ] Export conversation feature
+- [x] Upgraded AI model
 
 ---
 
