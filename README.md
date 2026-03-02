@@ -1,5 +1,4 @@
 # EchoMind AI - Emotional Intelligence Assistant
-EchoMind is an intelligent chatbot that understands user intent and emotional context, delivering adaptive AI responses powered by real-time language models. An emotion-aware AI chatbot with voice interaction built using Node.js, modern web technologies, and real-time AI APIs.
 
 ![Version](https://img.shields.io/badge/version-2.0.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
