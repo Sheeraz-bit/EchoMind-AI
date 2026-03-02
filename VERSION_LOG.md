@@ -147,13 +147,12 @@ EchoMind-AI/ ├── server.js ├── public/ │ ├── index.html │ 
 
 ---
 
-## 🔮 Planned for Version 4.0
+## 🔮 Upcoming Version 4.0 likely include
 
 - [ ] Real face detection emotion recognition
-- [ ] Multiple language support
-- [ ] User accounts and conversation saving
-- [ ] Custom voice model integration
-- [ ] Dark/light theme toggle
+- [x] User accounts and conversation saving
+- [x] Custom voice model integration
+- [x] Dark/light theme toggle
 - [ ] PWA support for offline use
 - [ ] Export conversation feature
 
