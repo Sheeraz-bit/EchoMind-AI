@@ -134,7 +134,7 @@ EchoMind AI is fully optimized for mobile devices:
 
 _Without API key, the system uses enhanced local responses_
 
-## 📊 Version History
+## 📊 Version History <a src='./VERSION_LOG.md'> Version Logs </a>
 
 ### Version Evolution
 
