@@ -29,4 +29,4 @@ A sophisticated AI Emotional Assistant that combines emotion detection with inte
    git clone https://github.com/yourusername/echomind-ai.git
    cd echomind-ai
 
-<img href='./AI Emotional Assistant · professional UI - Google Chrome 3_2_2026 6_31_45 AM.png'>
+<img src='./AI Emotional Assistant · professional UI - Google Chrome 3_2_2026 6_31_45 AM.png'>
