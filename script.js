@@ -140,6 +140,8 @@ function setEmotion(emotion, confidence) {
 
 // Update emotion display
 function updateEmotionDisplay(emotion, confidence) {
+    if (!emotionValue || !confidenceValue || !currentEmotionDisplay) return;
+    
     const displayEmotion = emotion.charAt(0).toUpperCase() + emotion.slice(1);
     emotionValue.textContent = displayEmotion;
     confidenceValue.textContent = confidence + '%';
@@ -162,13 +164,16 @@ function updateEmotionColor(emotion) {
     };
     
     const color = colors[emotion] || '#95a5a6';
-    emotionValue.style.color = color;
-    currentEmotionDisplay.style.color = color;
-    currentEmotionDisplay.style.background = color + '20';
+    if (emotionValue) emotionValue.style.color = color;
+    if (currentEmotionDisplay) {
+        currentEmotionDisplay.style.color = color;
+        currentEmotionDisplay.style.background = color + '20';
+    }
 }
 
 // Update emotion icon
 function updateEmotionIcon(emotion) {
+    if (!mainEmotionIcon) return;
     const iconClass = emotionIcons[emotion] || 'fa-meh';
     mainEmotionIcon.innerHTML = `<i class="fas ${iconClass}"></i>`;
 }
@@ -177,7 +182,7 @@ function updateEmotionIcon(emotion) {
 function updateEmotionBars() {
     // Update each emotion bar
     Object.keys(emotionBars).forEach(emotion => {
-        if (emotionBars[emotion]) {
+        if (emotionBars[emotion] && emotionBars[emotion].bar && emotionBars[emotion].value) {
             const intensity = currentEmotionIntensity[emotion] || 0;
             emotionBars[emotion].bar.style.width = intensity + '%';
             emotionBars[emotion].value.textContent = intensity + '%';
@@ -240,45 +245,70 @@ function stopAutoEmotionCycle() {
 
 // Initialize voice recognition
 function initVoiceRecognition() {
+    // Check if voice status element exists
+    if (!voiceStatus) return;
+    
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     
     if (SpeechRecognition) {
-        recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.lang = 'en-US';
-        recognition.maxAlternatives = 1;
-        
-        recognition.onstart = function() {
-            isListening = true;
-            updateVoiceStatus('Listening... Speak now', 'listening');
-            voiceButton.innerHTML = '<i class="fas fa-microphone-slash"></i> Stop';
-            voiceButton.classList.add('listening');
-        };
-        
-        recognition.onresult = function(event) {
-            const transcript = event.results[0][0].transcript;
-            userInput.value = transcript;
-            updateVoiceStatus('Processing speech...', 'processing');
+        try {
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+            recognition.maxAlternatives = 1;
             
-            // Auto-send after short delay
-            setTimeout(() => {
-                sendMessage();
-            }, 800);
-        };
-        
-        recognition.onerror = function(event) {
-            console.log('Speech recognition error:', event.error);
-            updateVoiceStatus('Voice input error', 'error');
-            stopListening();
-        };
-        
-        recognition.onend = function() {
-            stopListening();
-        };
+            recognition.onstart = function() {
+                isListening = true;
+                updateVoiceStatus('Listening... Speak now', 'listening');
+                if (voiceButton) {
+                    voiceButton.innerHTML = '<i class="fas fa-microphone-slash"></i> Stop';
+                    voiceButton.classList.add('listening');
+                }
+            };
+            
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                if (userInput) {
+                    userInput.value = transcript;
+                }
+                updateVoiceStatus('Processing speech...', 'processing');
+                
+                // Auto-send after short delay
+                setTimeout(() => {
+                    sendMessage();
+                }, 800);
+            };
+            
+            recognition.onerror = function(event) {
+                console.log('Speech recognition error:', event.error);
+                
+                let errorMessage = 'Voice input error';
+                if (event.error === 'not-allowed') {
+                    errorMessage = 'Microphone access denied. Please allow microphone access.';
+                } else if (event.error === 'no-speech') {
+                    errorMessage = 'No speech detected. Please try again.';
+                }
+                
+                updateVoiceStatus(errorMessage, 'error');
+                stopListening();
+            };
+            
+            recognition.onend = function() {
+                stopListening();
+            };
+        } catch (error) {
+            console.error('Error initializing speech recognition:', error);
+            updateVoiceStatus('Voice recognition unavailable', 'error');
+            if (voiceButton) {
+                voiceButton.disabled = true;
+            }
+        }
     } else {
-        voiceButton.disabled = true;
-        voiceButton.innerHTML = '<i class="fas fa-microphone-slash"></i> Not Supported';
+        if (voiceButton) {
+            voiceButton.disabled = true;
+            voiceButton.innerHTML = '<i class="fas fa-microphone-slash"></i> Not Supported';
+        }
         updateVoiceStatus('Voice recognition not supported in this browser', 'error');
     }
 }
@@ -292,26 +322,42 @@ function toggleVoiceRecognition() {
     
     if (!isListening) {
         try {
-            recognition.start();
+            // Request microphone permission explicitly
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(() => {
+                    recognition.start();
+                })
+                .catch((err) => {
+                    console.error('Microphone permission denied:', err);
+                    updateVoiceStatus('Microphone access required', 'error');
+                });
         } catch (error) {
             console.error('Error starting voice recognition:', error);
-            updateVoiceStatus('Error: ' + error.message, 'error');
+            updateVoiceStatus('Error starting voice input', 'error');
         }
     } else {
-        recognition.stop();
+        try {
+            recognition.stop();
+        } catch (error) {
+            console.error('Error stopping recognition:', error);
+        }
     }
 }
 
 // Stop listening
 function stopListening() {
     isListening = false;
-    voiceButton.innerHTML = '<i class="fas fa-microphone"></i> Voice Input';
-    voiceButton.classList.remove('listening');
+    if (voiceButton) {
+        voiceButton.innerHTML = '<i class="fas fa-microphone"></i> Voice Input';
+        voiceButton.classList.remove('listening');
+    }
     updateVoiceStatus('Ready for voice input', 'ready');
 }
 
 // Update voice status
 function updateVoiceStatus(message, type) {
+    if (!voiceStatus) return;
+    
     const icons = {
         listening: 'fa-circle',
         processing: 'fa-circle',
@@ -333,51 +379,54 @@ function updateVoiceStatus(message, type) {
 }
 
 // Send message function
-function sendMessage() {
+async function sendMessage() {
+    if (!userInput || !chatMessages) return;
+    
     const message = userInput.value.trim();
-    
-    if (!message) {
-        return;
-    }
-    
-    // Add user message to chat
+    if (!message) return;
+
     addMessageToChat(message, 'user');
-    
-    // Clear input
     userInput.value = '';
-    
-    // Show typing indicator
+
     showTypingIndicator();
-    
-    // Get AI response after delay
-    setTimeout(() => {
-        // Remove typing indicator
+
+    try {
+        // Try to use the server API if available
+        const response = await fetch('http://localhost:3000/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message,
+                emotion: currentEmotion
+            })
+        }).catch(() => null); // Catch network errors
+
+        removeTypingIndicator();
+
+        if (response && response.ok) {
+            const data = await response.json();
+            const aiReply = data?.choices?.[0]?.message?.content || 
+                           "I received your message but couldn't generate a proper response.";
+            addMessageToChat(aiReply, 'ai');
+            speakResponse(aiReply);
+        } else {
+            // Fallback to local response generation
+            const localResponse = getAIResponse(message);
+            addMessageToChat(localResponse, 'ai');
+            speakResponse(localResponse);
+        }
+    } catch (error) {
+        console.error('Error sending message:', error);
         removeTypingIndicator();
         
-        // Get AI response
-        const response = getAIResponse(message);
-        
-        // Add AI response to chat
-        addMessageToChat(response, 'ai');
-        
-        // Add to conversation history
-        conversationHistory.push({ role: 'user', content: message });
-        conversationHistory.push({ role: 'assistant', content: response });
-        
-        // Keep history manageable
-        if (conversationHistory.length > 10) {
-            conversationHistory = conversationHistory.slice(-10);
-        }
-        
-        // Speak response
-        speakResponse(response);
-        
-    }, 800 + Math.random() * 700);
+        // Fallback to local response
+        const localResponse = getAIResponse(message);
+        addMessageToChat(localResponse, 'ai');
+        speakResponse(localResponse);
+    }
 }
-
-// ============================================================================
-// PERFECT ENGLISH RESPONSE SYSTEM
-// ============================================================================
 
 // Get AI response with perfect English
 function getAIResponse(message) {
@@ -446,7 +495,7 @@ function getExactMatchResponses(message, emotion) {
 // Check if message is a greeting
 function isGreeting(message) {
     const greetings = ['hi', 'hello', 'hey', 'greetings', 'good morning', 'good afternoon', 'good evening'];
-    return greetings.some(greeting => message.startsWith(greeting));
+    return greetings.some(greeting => message.includes(greeting));
 }
 
 // Get greeting response
@@ -464,12 +513,11 @@ function getGreetingResponse(emotion) {
 // Check if message expresses feelings
 function isFeelingExpression(message) {
     const feelingPatterns = [
-        /i (feel|am feeling) (.+)/,
-        /i am (.+)/,
-        /i'm (.+)/,
-        /i feel (.+)/,
-        /feeling (.+)/,
-        /i feel like (.+)/
+        /i (feel|am feeling)/,
+        /i am /,
+        /i'm /,
+        /i feel /,
+        /feeling /
     ];
     
     return feelingPatterns.some(pattern => pattern.test(message));
@@ -490,7 +538,10 @@ function getFeelingResponse(message, emotion) {
     
     for (const pattern of patterns) {
         const match = message.match(pattern);
-        if (match && match[1]) {
+        if (match && match[2]) {
+            feeling = match[2].toLowerCase();
+            break;
+        } else if (match && match[1]) {
             feeling = match[1].toLowerCase();
             break;
         }
@@ -715,6 +766,8 @@ function getEmotionGoodbye(emotion) {
 
 // Add message to chat
 function addMessageToChat(message, sender) {
+    if (!chatMessages) return;
+    
     const messageElement = document.createElement('div');
     messageElement.className = 'message ' + sender + '-message';
     
@@ -740,6 +793,8 @@ function addMessageToChat(message, sender) {
 
 // Show typing indicator
 function showTypingIndicator() {
+    if (!chatMessages) return;
+    
     const typingElement = document.createElement('div');
     typingElement.className = 'message ai-message typing-indicator';
     typingElement.id = 'typingIndicator';
@@ -773,28 +828,34 @@ function removeTypingIndicator() {
 // Speak response
 function speakResponse(text) {
     if ('speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined') {
-        // Cancel any ongoing speech
-        window.speechSynthesis.cancel();
-        
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 0.95;
-        utterance.pitch = 1.0;
-        utterance.volume = 1.0;
-        
-        // Get available voices
-        const voices = window.speechSynthesis.getVoices();
-        if (voices.length > 0) {
-            // Try to find an English voice
-            const englishVoice = voices.find(voice => voice.lang.startsWith('en')) || voices[0];
-            utterance.voice = englishVoice;
+        try {
+            // Cancel any ongoing speech
+            window.speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.95;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            
+            // Get available voices
+            const voices = window.speechSynthesis.getVoices();
+            if (voices.length > 0) {
+                // Try to find an English voice
+                const englishVoice = voices.find(voice => voice.lang.startsWith('en')) || voices[0];
+                utterance.voice = englishVoice;
+            }
+            
+            window.speechSynthesis.speak(utterance);
+        } catch (error) {
+            console.error('Speech synthesis error:', error);
         }
-        
-        window.speechSynthesis.speak(utterance);
     }
 }
 
 // Clear chat
 function clearChat() {
+    if (!chatMessages) return;
+    
     chatMessages.innerHTML = `
         <div class="message ai-message">
             <div class="message-avatar">
