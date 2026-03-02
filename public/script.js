@@ -826,29 +826,84 @@ function removeTypingIndicator() {
 }
 
 // Speak response
+// Enhanced voice with emotion-based modulation
 function speakResponse(text) {
-    if ('speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined') {
-        try {
-            // Cancel any ongoing speech
-            window.speechSynthesis.cancel();
-            
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.95;
-            utterance.pitch = 1.0;
-            utterance.volume = 1.0;
-            
-            // Get available voices
-            const voices = window.speechSynthesis.getVoices();
-            if (voices.length > 0) {
-                // Try to find an English voice
-                const englishVoice = voices.find(voice => voice.lang.startsWith('en')) || voices[0];
-                utterance.voice = englishVoice;
-            }
-            
+    if (!('speechSynthesis' in window)) {
+        console.log('Speech synthesis not supported');
+        return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+    
+    // Voice settings based on current emotion
+    const voiceConfig = {
+        happy: { rate: 1.1, pitch: 1.2, volume: 1.0 },      // Faster, higher pitch
+        sad: { rate: 0.8, pitch: 0.9, volume: 0.9 },        // Slower, lower pitch
+        angry: { rate: 1.2, pitch: 1.1, volume: 1.0 },       // Faster, slightly higher
+        surprise: { rate: 1.3, pitch: 1.3, volume: 1.0 },    // Fast, high pitch
+        neutral: { rate: 0.95, pitch: 1.0, volume: 1.0 },    // Normal
+        fear: { rate: 0.9, pitch: 1.1, volume: 0.9 }         // Slightly shaky (rate variation)
+    };
+    
+    const config = voiceConfig[currentEmotion] || voiceConfig.neutral;
+    
+    // Priority list of most natural voices
+    const voicePriority = [
+        'Google UK English Female',  // Most natural
+        'Microsoft Hazel - English (Great Britain)',
+        'Google UK English Male',
+        'Microsoft Susan - English (United Kingdom)',
+        'Google US English',
+        'Microsoft Zira - English (United States)',
+        'Samantha',
+        'Alex'
+    ];
+    
+    // Find best voice
+    let selectedVoice = null;
+    for (const preferred of voicePriority) {
+        selectedVoice = voices.find(v => v.name.includes(preferred));
+        if (selectedVoice) break;
+    }
+    
+    if (!selectedVoice) {
+        selectedVoice = voices.find(v => v.lang.startsWith('en'));
+    }
+    
+    if (selectedVoice) {
+        utterance.voice = selectedVoice;
+    }
+    
+    // Apply emotion-based modulation
+    utterance.rate = config.rate;
+    utterance.pitch = config.pitch;
+    utterance.volume = config.volume;
+    
+    // Add natural speech patterns
+    if (currentEmotion === 'sad') {
+        utterance.text = text.replace(/\./g, '...');  // Add pauses for sadness
+    }
+    
+    if (currentEmotion === 'surprise') {
+        utterance.text = text.replace(/\./g, '!');    // More excitement
+    }
+    
+    // Handle voices loaded asynchronously
+    if (speechSynthesis.getVoices().length === 0) {
+        speechSynthesis.addEventListener('voiceschanged', () => {
+            const updatedVoices = speechSynthesis.getVoices();
+            const betterVoice = updatedVoices.find(v => 
+                v.name.includes('Google UK') || 
+                v.name.includes('Microsoft Hazel')
+            );
+            if (betterVoice) utterance.voice = betterVoice;
             window.speechSynthesis.speak(utterance);
-        } catch (error) {
-            console.error('Speech synthesis error:', error);
-        }
+        });
+    } else {
+        window.speechSynthesis.speak(utterance);
     }
 }
 

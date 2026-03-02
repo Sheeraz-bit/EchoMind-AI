@@ -1,6 +1,6 @@
 # EchoMind AI - Emotional Intelligence Assistant
 
-![Version](https://img.shields.io/badge/version-2.0.0-blue)
+![Version](https://img.shields.io/badge/version-2.1.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 A sophisticated AI Emotional Assistant that combines emotion detection with intelligent conversation. The system adapts its responses based on detected emotional states, providing empathetic and contextually appropriate interactions.
