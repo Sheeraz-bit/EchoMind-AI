@@ -5,17 +5,11 @@
 Ready](https://img.shields.io/badge/mobile-optimized-brightgreen)
 ![Voice Enabled](https://img.shields.io/badge/voice-enabled-purple)
 
-::: {align="center"}
-`<img src="./AI Emotional Assistant · professional UI - Google Chrome 3_2_2026 6_31_45 AM.png" alt="EchoMind AI Screenshot" width="800"/>`{=html}
-```{=html}
-<p>
-```
-`<i>`{=html}EchoMind AI - Professional Interface with Emotional
-Intelligence`</i>`{=html}
-```{=html}
+<p align="center">
+<img src="./AI Emotional Assistant · professional UI - Google Chrome 3_2_2026 6_31_45 AM.png" alt="EchoMind AI Screenshot" width="800"/>
 </p>
-```
-:::
+
+_EchoMind AI - Professional Interface with Emotional Intelligence_
 
 A sophisticated AI Emotional Assistant that combines emotion detection
 with intelligent conversation. The system adapts its responses based on
@@ -133,14 +127,12 @@ EchoMind AI is fully optimized for mobile devices:
 
 ### Environment Variables
 
-Variable Description Required
+| Variable           | Description                 | Required |
+| ------------------ | --------------------------- | :------: |
+| OPENROUTER_API_KEY | API key for OpenRouter AI   |    No    |
+| PORT               | Server port (default: 3000) |    No    |
 
----
-
-OPENROUTER_API_KEY API key for OpenRouter AI No
-PORT Server port (default: 3000) No
-
-\*Without API key, the system uses enhanced local responses
+_Without API key, the system uses enhanced local responses_
 
 ## 📊 Version History
 
@@ -193,7 +185,8 @@ Live Demo: https://echomind-ai.onrender.com
 
 ---
 
-<p align="center">
-**Made with ❤️ for emotional intelligence**  
-*Built with vanilla JavaScript - no heavy frameworks*
-</p>
+::: {align="center"}
+`<b>`{=html}Made with ❤️ for emotional
+intelligence`</b>`{=html}`<br/>`{=html} `<sub>`{=html}Built with vanilla
+JavaScript - no heavy frameworks`</sub>`{=html}
+:::
