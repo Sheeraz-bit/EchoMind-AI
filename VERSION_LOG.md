@@ -196,8 +196,10 @@ EchoMind-AI/ ├── server.js ├── public/ │ ├── index.html │ 
 
 ---
 
-::: {align="center"}
-`<sub>`{=html}EchoMind AI - Evolving emotional intelligence since
-2026`</sub>`{=html} `<br/>`{=html} `<sub>`{=html}⭐ Star us on GitHub if
-you find this project useful!`</sub>`{=html}
-:::
+<div align="center">
+
+_EchoMind AI - Evolving emotional intelligence since 2026_
+
+⭐ **Star us on GitHub if you find this project useful!**
+
+</div>

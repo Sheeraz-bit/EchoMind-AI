@@ -6,7 +6,7 @@ Ready](https://img.shields.io/badge/mobile-optimized-brightgreen)
 ![Voice Enabled](https://img.shields.io/badge/voice-enabled-purple)
 
 <p align="center">
-<img src="./AI Emotional Assistant · professional UI - Google Chrome 3_2_2026 6_31_45 AM.png" alt="EchoMind AI Screenshot" width="800"/>
+<img src="./assets/images/echomindVer3.png.png" alt="EchoMind AI Screenshot" width="800"/>
 </p>
 
 _EchoMind AI - Professional Interface with Emotional Intelligence_
@@ -18,7 +18,7 @@ appropriate interactions across all devices.
 
 ## 📱 Live Demo
 
-🌐 **Live App**: <https://echomind-ai.onrender.com>
+🌐 **Live App**: <https://echomind-ai-0uuh.onrender.com>
 
 ## ✨ Features
 
@@ -129,12 +129,36 @@ EchoMind AI is fully optimized for mobile devices:
 
 | Variable           | Description                 | Required |
 | ------------------ | --------------------------- | :------: |
-| OPENROUTER_API_KEY | API key for OpenRouter AI   |    No    |
-| PORT               | Server port (default: 3000) |    No    |
+| OPENROUTER_API_KEY | API key for OpenRouter AI   |   Yes    |
+| PORT               | Server port (default: 3000) |   Yes    |
 
 _Without API key, the system uses enhanced local responses_
 
 ## 📊 Version History
+
+### Version Evolution
+
+<table>
+<tr>
+<td align="center" width="33%">
+<h3>v1.0.0</h3>
+<img src="./assets/images/echomindVer1.png" alt="EchoMind v1.0" width="100%"/>
+<p><strong>Initial Release</strong><br/>Basic emotion detection interface</p>
+</td>
+<td align="center" width="33%">
+<h3>v2.0.0</h3>
+<img src="./assets/images/echomindVer2.png" alt="EchoMind v2.0" width="100%"/>
+<p><strong>Major UI Overhaul</strong><br/>3D Effects & Glass Morphism</p>
+</td>
+<td align="center" width="33%">
+<h3>v3.0.0</h3>
+<img src="./assets/images/echomindVer3.png" alt="EchoMind v3.0" width="100%"/>
+<p><strong>Mobile Optimization</strong><br/>Enhanced UI (Current)</p>
+</td>
+</tr>
+</table>
+
+### Release Timeline
 
 - v3.0.0 - Mobile Optimization & Enhanced UI (Current)
 - v2.1.0 - Voice Enhancement & Bug Fixes
@@ -180,13 +204,16 @@ This project is licensed under the MIT License.
 
 ## 📧 Contact
 
-Project Link: https://github.com/yourusername/echomind-ai\
-Live Demo: https://echomind-ai.onrender.com
+Project Link: https://github.com/Sheeraz-bit/EchoMind-AI.git
+Live Demo: https://echomind-ai-0uuh.onrender.com
+Developer: https://link-holder.vercel.app/
 
 ---
 
-::: {align="center"}
-`<b>`{=html}Made with ❤️ for emotional
-intelligence`</b>`{=html}`<br/>`{=html} `<sub>`{=html}Built with vanilla
-JavaScript - no heavy frameworks`</sub>`{=html}
-:::
+<div align="center">
+
+**Made with ❤️ for emotional intelligence**
+
+_Built with vanilla JavaScript - no heavy frameworks_
+
+</div>
