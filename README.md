@@ -1,34 +1,198 @@
 # EchoMind AI - Emotional Intelligence Assistant
 
-![Version](https://img.shields.io/badge/version-2.1.0-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
+![Version](https://img.shields.io/badge/version-3.0.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green) ![Mobile
+Ready](https://img.shields.io/badge/mobile-optimized-brightgreen)
+![Voice Enabled](https://img.shields.io/badge/voice-enabled-purple)
 
-A sophisticated AI Emotional Assistant that combines emotion detection with intelligent conversation. The system adapts its responses based on detected emotional states, providing empathetic and contextually appropriate interactions.
+::: {align="center"}
+`<img src="./AI Emotional Assistant · professional UI - Google Chrome 3_2_2026 6_31_45 AM.png" alt="EchoMind AI Screenshot" width="800"/>`{=html}
+```{=html}
+<p>
+```
+`<i>`{=html}EchoMind AI - Professional Interface with Emotional
+Intelligence`</i>`{=html}
+```{=html}
+</p>
+```
+:::
+
+A sophisticated AI Emotional Assistant that combines emotion detection
+with intelligent conversation. The system adapts its responses based on
+detected emotional states, providing empathetic and contextually
+appropriate interactions across all devices.
+
+## 📱 Live Demo
+
+🌐 **Live App**: <https://echomind-ai.onrender.com>
 
 ## ✨ Features
 
-- **🎭 Emotion Detection Interface** - Manual emotion selection with visual feedback
-- **💬 Context-Aware Chat** - AI responses adapt to emotional context
-- **🎤 Voice Input Support** - Speech recognition for hands-free interaction
-- **📊 Emotion Intensity Analysis** - Visual representation of emotional states
-- **🔄 Auto-Emotion Rotation** - Demonstration mode with cycling emotions
-- **📱 Fully Responsive Design** - Works on desktop, tablet, and mobile
+### 🎭 **Emotional Intelligence**
+
+-   **6 Emotion States** - Happy, Sad, Angry, Surprise, Fear, Neutral
+-   **Real-time Emotion Display** - Visual feedback with animated icons
+-   **Emotion Intensity Bars** - Visual representation of emotional
+    states
+-   **Auto-Emotion Rotation** - Demonstration mode with cycling emotions
+
+### 💬 **Smart Conversation**
+
+-   **Context-Aware Responses** - AI adapts tone based on emotional
+    context
+-   **Mobile-Optimized Chat** - Enhanced experience for mobile users
+-   **Rich Response Library** - Jokes, facts, and engaging content
+-   **Conversation Suggestions** - Topic prompts for better engagement
+
+### 🎤 **Voice Capabilities**
+
+-   **Voice Input** - Speech recognition for hands-free interaction
+-   **Emotion-Based Voice Output** - Voice pitch/rate adapts to emotion
+-   **Mobile-Safe Speech** - Optimized for Android and iOS devices
+-   **Multiple Voice Options** - Premium voice selection (Google UK
+    Female, Microsoft Hazel)
+
+### 🎨 **Living Interface**
+
+-   **3D Animations** - Morphing shapes and floating particles
+-   **Glass Morphism** - Modern frosted glass effects
+-   **Fully Responsive** - Perfect on desktop, tablet, and mobile
+-   **Smooth Transitions** - Bouncy animations and hover effects
+
+### 📊 **Emotion Analysis**
+
+-   **Intensity Tracking** - Real-time emotion percentage bars
+-   **Confidence Display** - AI confidence level for detected emotion
+-   **Response Style Indicator** - Shows current AI communication style
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- npm or yarn
-- OpenRouter API key (optional, for real AI responses)
+-   Node.js (v14 or higher)
+-   npm or yarn
+-   OpenRouter API key (optional, for enhanced AI responses)
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/echomind-ai.git
-   cd echomind-ai
+1.  **Clone the repository**
 
-## 🖼️ Screenshot
+    ``` bash
+    git clone https://github.com/yourusername/echomind-ai.git
+    cd echomind-ai
+    ```
 
-<img src='./AI Emotional Assistant · professional UI - Google Chrome 3_2_2026 6_31_45 AM.png'>
+2.  **Install dependencies**
+
+    ``` bash
+    npm install
+    ```
+
+3.  **Set up environment variables**
+
+    ``` bash
+    cp .env.example .env
+    # Edit .env and add your OpenRouter API key (optional)
+    ```
+
+4.  **Start the server**
+
+    ``` bash
+    npm start
+    # or for development with auto-reload
+    npm run dev
+    ```
+
+5.  **Open your browser**
+
+        http://localhost:3000
+
+## 📱 Mobile Support
+
+EchoMind AI is fully optimized for mobile devices:
+
+-   Touch-Friendly UI - Large buttons and touch targets
+-   Mobile-Optimized Responses - Shorter, engaging replies
+-   Safe Speech Synthesis - Works on Android and iOS
+-   Responsive Layout - Adapts to any screen size
+
+## 🏗️ Architecture
+
+    EchoMind-AI/
+    ├── server.js
+    ├── public/
+    │   ├── index.html
+    │   ├── style.css
+    │   └── script.js
+    ├── .env
+    ├── package.json
+    ├── README.md
+    └── VERSION_LOG.md
+
+## 🔧 Configuration
+
+### Environment Variables
+
+  Variable             Description                   Required
+  -------------------- ----------------------------- ----------
+  OPENROUTER_API_KEY   API key for OpenRouter AI     No
+  PORT                 Server port (default: 3000)   No
+
+\*Without API key, the system uses enhanced local responses
+
+## 📊 Version History
+
+-   v3.0.0 - Mobile Optimization & Enhanced UI (Current)
+-   v2.1.0 - Voice Enhancement & Bug Fixes
+-   v2.0.0 - Major UI Overhaul with 3D Effects
+-   v1.1.0 - Voice Recognition & API Integration
+-   v1.0.0 - Initial Release
+
+## 🎯 Usage Guide
+
+### Desktop Users
+
+-   Click emotion buttons to change AI mood
+-   Type messages or use voice input
+-   Watch the 3D animations respond to interactions
+-   Enable auto-rotate for demonstration
+
+### Mobile Users
+
+-   Tap emotion buttons (large touch targets)
+-   Use voice input for hands-free interaction
+-   Get shorter, optimized responses
+-   Enjoy smooth animations on any device
+
+## 🤝 Contributing
+
+1.  Fork the repository
+2.  Create your feature branch
+    (`git checkout -b feature/AmazingFeature`)
+3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 🙏 Acknowledgments
+
+-   OpenRouter API for AI capabilities
+-   Font Awesome for premium icons
+-   Google Fonts for Inter and Poppins typography
+-   Render for seamless hosting
+
+## 📧 Contact
+
+Project Link: https://github.com/yourusername/echomind-ai\
+Live Demo: https://echomind-ai.onrender.com
+
+------------------------------------------------------------------------
+
+::: {align="center"}
+`<b>`{=html}Made with ❤️ for emotional
+intelligence`</b>`{=html}`<br/>`{=html} `<sub>`{=html}Built with vanilla
+JavaScript - no heavy frameworks`</sub>`{=html}
+:::

@@ -4,600 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Emotional Assistant · professional UI</title>
-    <!-- Font Awesome 6 (free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Poppins + Inter (clean hybrid) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* ========== PROPORTIONAL DESIGN SYSTEM ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            /* spacing – 8px base */
-            --space-1: 0.25rem;   /* 4px  */
-            --space-2: 0.5rem;    /* 8px  */
-            --space-3: 0.75rem;   /* 12px */
-            --space-4: 1rem;      /* 16px */
-            --space-5: 1.25rem;   /* 20px */
-            --space-6: 1.5rem;    /* 24px */
-            --space-7: 1.75rem;   /* 28px */
-            --space-8: 2rem;      /* 32px */
-            --space-9: 2.25rem;   /* 36px */
-            --space-10: 2.5rem;   /* 40px */
-            --space-12: 3rem;     /* 48px */
-            --space-14: 3.5rem;   /* 56px */
-            --space-16: 4rem;     /* 64px */
-
-            /* refined typography */
-            --text-xs: 0.75rem;
-            --text-sm: 0.875rem;
-            --text-base: 1rem;
-            --text-lg: 1.125rem;
-            --text-xl: 1.25rem;
-            --text-2xl: 1.5rem;
-            --text-3xl: 1.875rem;
-            --text-4xl: 2.25rem;
-
-            /* premium color palette – soft, trustworthy */
-            --primary: #3b71ca;
-            --primary-dark: #1e4f9c;
-            --primary-soft: #e8f0fe;
-            --secondary: #9b6b9e;
-            --accent: #ffb347;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --info: #3b82f6;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
-            --gray-400: #9ca3af;
-            --gray-500: #6b7280;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --gray-900: #111827;
-            
-            --bg-body: #f4f7fb;
-            --card-bg: #ffffff;
-            --border-light: #edf2f7;
-
-            /* shadows – depth with elegance */
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.03);
-            --shadow-md: 0 4px 8px rgba(0,0,0,0.03), 0 2px 4px rgba(0,0,0,0.02);
-            --shadow-lg: 0 20px 30px -10px rgba(0,20,40,0.15), 0 8px 12px rgba(0,0,0,0.02);
-            --shadow-xl: 0 30px 50px -20px rgba(0,40,80,0.25);
-
-            --radius-md: 0.75rem;
-            --radius-lg: 1.25rem;
-            --radius-xl: 1.75rem;
-            --radius-full: 9999px;
-
-            --transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
-        }
-
-        body {
-            font-family: 'Inter', 'Poppins', sans-serif;
-            background: var(--bg-body);
-            color: var(--gray-800);
-            line-height: 1.5;
-            min-height: 100vh;
-            padding: var(--space-5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .container {
-            max-width: 1600px;
-            width: 100%;
-            background: var(--card-bg);
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-xl);
-            overflow: hidden;
-            backdrop-filter: blur(2px);
-            border: 1px solid rgba(255,255,255,0.4);
-        }
-
-        /* ===== HEADER (soft gradient) ===== */
-        .header {
-            padding: var(--space-12) var(--space-10);
-            background: linear-gradient(125deg, #ffffff 0%, #f9fcff 100%);
-            border-bottom: 1px solid var(--border-light);
-            text-align: center;
-        }
-        .header h1 {
-            font-size: var(--text-4xl);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            background: linear-gradient(145deg, var(--primary), #6d8fd1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: var(--space-3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-4);
-        }
-        .header h1 i {
-            background: linear-gradient(135deg, var(--primary), #b983c9);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 2.5rem;
-        }
-        .subtitle {
-            font-size: var(--text-lg);
-            color: var(--gray-500);
-            font-weight: 400;
-            border-bottom: 2px dotted var(--gray-200);
-            padding-bottom: var(--space-4);
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        /* ===== MAIN 2-COLUMN GRID (airy) ===== */
-        .main-content {
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: var(--space-8);
-            padding: var(--space-8);
-            background: #ffffff;
-        }
-        @media (max-width: 1000px) {
-            .main-content {
-                grid-template-columns: 1fr;
-                gap: var(--space-8);
-            }
-        }
-
-        /* section cards */
-        section {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: var(--space-8);
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border-light);
-            transition: var(--transition);
-        }
-        section:hover {
-            box-shadow: var(--shadow-xl);
-        }
-        section h2 {
-            font-size: var(--text-2xl);
-            font-weight: 600;
-            color: var(--gray-800);
-            margin-bottom: var(--space-6);
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            border-bottom: 2px solid var(--gray-100);
-            padding-bottom: var(--space-4);
-        }
-        section h2 i {
-            color: var(--primary);
-            font-size: 1.8rem;
-            width: 2.5rem;
-        }
-
-        /* ===== EMOTION PANEL ===== */
-        .emotion-display-box {
-            background: linear-gradient(115deg, var(--gray-50), #ffffff);
-            border-radius: var(--radius-lg);
-            padding: var(--space-6);
-            display: flex;
-            align-items: center;
-            gap: var(--space-8);
-            border: 1px solid var(--gray-200);
-            margin-bottom: var(--space-6);
-            box-shadow: var(--shadow-sm);
-        }
-        .emotion-icon-large {
-            width: 110px;
-            height: 110px;
-            background: linear-gradient(145deg, var(--primary), var(--secondary));
-            border-radius: 40% 60% 30% 70% / 50% 40% 60% 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3.8rem;
-            color: white;
-            box-shadow: 0 15px 25px -8px rgba(59,113,202,0.4);
-        }
-        .emotion-main-info h3 {
-            font-size: var(--text-xs);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--gray-400);
-            font-weight: 500;
-        }
-        .emotion-value-large {
-            font-size: var(--text-4xl);
-            font-weight: 700;
-            color: var(--gray-800);
-            line-height: 1.2;
-        }
-        .confidence-display {
-            background: white;
-            padding: var(--space-2) var(--space-4);
-            border-radius: var(--radius-full);
-            border: 1px solid var(--gray-200);
-            width: fit-content;
-            font-weight: 500;
-            box-shadow: var(--shadow-sm);
-        }
-        .confidence-value {
-            color: var(--success);
-            font-weight: 700;
-            margin-left: var(--space-1);
-        }
-
-        /* emotion controls */
-        .emotion-controls-panel {
-            background: var(--gray-50);
-            border-radius: var(--radius-lg);
-            padding: var(--space-6);
-            border: 1px solid var(--border-light);
-        }
-        .emotion-buttons {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-4);
-            margin: var(--space-6) 0;
-        }
-        .emotion-btn {
-            border: none;
-            background: white;
-            padding: var(--space-5) var(--space-2);
-            border-radius: var(--radius-lg);
-            font-weight: 500;
-            color: var(--gray-700);
-            box-shadow: var(--shadow-sm);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--space-3);
-            transition: var(--transition);
-            border: 1px solid transparent;
-            cursor: pointer;
-        }
-        .emotion-btn i {
-            font-size: var(--text-2xl);
-            color: var(--primary);
-        }
-        .emotion-btn:hover {
-            border-color: var(--primary);
-            background: white;
-            transform: scale(1.02) translateY(-3px);
-            box-shadow: 0 15px 20px -10px rgba(59,113,202,0.25);
-        }
-        /* specific icons colors on hover (just for fun) */
-        .happy-btn:hover i { color: #f1c40f; }
-        .sad-btn:hover i { color: #3498db; }
-        .angry-btn:hover i { color: #e74c3c; }
-        .surprise-btn:hover i { color: #9b59b6; }
-        .neutral-btn:hover i { color: #7f8c8d; }
-        .fear-btn:hover i { color: #d35400; }
-
-        .auto-mode-control {
-            display: flex;
-            align-items: center;
-            gap: var(--space-4);
-            background: white;
-            padding: var(--space-5) var(--space-6);
-            border-radius: var(--radius-full);
-            border: 1px solid var(--gray-200);
-            width: fit-content;
-            margin: 0 auto;
-        }
-        .switch {
-            width: 52px;
-            height: 28px;
-            background: var(--gray-300);
-            border-radius: 40px;
-            position: relative;
-            cursor: pointer;
-        }
-        .switch input {
-            opacity: 0; width: 0; height: 0;
-        }
-        .slider:before {
-            content: '';
-            position: absolute;
-            width: 24px; height: 24px;
-            background: white;
-            border-radius: 50%;
-            top: 2px; left: 2px;
-            transition: 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        input:checked + .slider {
-            background: var(--primary);
-        }
-        input:checked + .slider:before {
-            transform: translateX(24px);
-        }
-
-        /* intensity bars */
-        .emotion-stats-container {
-            margin-top: var(--space-6);
-        }
-        .emotion-bar-container {
-            display: flex;
-            align-items: center;
-            gap: var(--space-4);
-            margin-bottom: var(--space-4);
-        }
-        .emotion-bar-label {
-            width: 110px;
-            font-weight: 500;
-            color: var(--gray-600);
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-        }
-        .emotion-bar {
-            flex: 1;
-            height: 10px;
-            background: var(--gray-200);
-            border-radius: var(--radius-full);
-            overflow: hidden;
-        }
-        .emotion-bar-fill {
-            height: 100%;
-            width: 0%;
-            border-radius: var(--radius-full);
-            transition: width 0.5s ease;
-            background: linear-gradient(90deg, var(--primary), #9b87f0);
-        }
-        .emotion-bar-fill[data-emotion="happy"] { background: linear-gradient(90deg,#f1c40f,#f39c12); }
-        .emotion-bar-fill[data-emotion="sad"] { background: linear-gradient(90deg,#3498db,#2980b9); }
-        .emotion-bar-fill[data-emotion="angry"] { background: linear-gradient(90deg,#e74c3c,#c0392b); }
-        .emotion-bar-fill[data-emotion="surprise"] { background: linear-gradient(90deg,#9b59b6,#8e44ad); }
-        .emotion-bar-value {
-            min-width: 50px;
-            text-align: right;
-            font-weight: 600;
-            color: var(--gray-700);
-        }
-
-        /* ===== CHAT SECTION ===== */
-        .chat-messages {
-            background: var(--gray-50);
-            border-radius: var(--radius-lg);
-            padding: var(--space-6);
-            height: 380px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-5);
-            margin-bottom: var(--space-6);
-            border: 1px solid var(--border-light);
-        }
-        .message {
-            display: flex;
-            gap: var(--space-4);
-            max-width: 90%;
-            animation: slideIn 0.3s;
-        }
-        @keyframes slideIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-        .ai-message { align-self: flex-start; }
-        .user-message { align-self: flex-end; flex-direction: row-reverse; }
-        .message-avatar {
-            width: 44px; height: 44px;
-            background: linear-gradient(145deg, var(--primary), #849fd8);
-            border-radius: var(--radius-full);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.4rem;
-            box-shadow: var(--shadow-sm);
-            flex-shrink: 0;
-        }
-        .user-message .message-avatar { background: linear-gradient(145deg, #f1c40f, #f39c12); }
-        .message-content {
-            background: white;
-            padding: var(--space-5);
-            border-radius: 22px 22px 22px 6px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--gray-200);
-        }
-        .user-message .message-content {
-            background: var(--primary);
-            color: white;
-            border-radius: 22px 22px 6px 22px;
-        }
-        .message-sender { font-weight: 600; font-size: var(--text-sm); margin-bottom: var(--space-1); display: flex; gap: var(--space-2);}
-        .message-time { font-size: var(--text-xs); color: var(--gray-400); margin-top: var(--space-2); display: flex; justify-content: flex-end; gap: 4px;}
-
-        /* input area */
-        .input-group {
-            display: flex;
-            gap: var(--space-4);
-            margin-bottom: var(--space-5);
-        }
-        #userInput {
-            flex: 1;
-            padding: var(--space-4) var(--space-5);
-            border: 1.5px solid var(--gray-200);
-            border-radius: 60px;
-            font-size: var(--text-base);
-            font-family: 'Inter', sans-serif;
-            background: var(--gray-50);
-            transition: var(--transition);
-        }
-        #userInput:focus {
-            border-color: var(--primary);
-            outline: none;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(59,113,202,0.12);
-        }
-        .btn {
-            padding: var(--space-4) var(--space-8);
-            border: none;
-            border-radius: 60px;
-            font-weight: 600;
-            font-size: var(--text-base);
-            background: white;
-            color: var(--gray-700);
-            border: 1px solid var(--gray-200);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-3);
-            transition: var(--transition);
-            box-shadow: var(--shadow-sm);
-        }
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            border: none;
-            box-shadow: 0 10px 18px -8px var(--primary);
-        }
-        .btn-primary:hover { background: var(--primary-dark); transform: scale(1.02); }
-        .btn-voice { background: #f0f9ff; color: var(--primary); border: 1px solid #cbd5e1; }
-        .btn-voice:hover { background: #e1f0fd; }
-
-        .chat-controls {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: var(--space-4);
-            margin-bottom: var(--space-5);
-        }
-        .voice-status {
-            background: white;
-            border-radius: 40px;
-            padding: var(--space-2) var(--space-5);
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-            font-size: var(--text-sm);
-            border: 1px solid var(--gray-200);
-        }
-        .voice-status i { color: var(--success); font-size: 0.6rem; }
-
-        .current-context {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-8);
-            background: var(--gray-50);
-            padding: var(--space-5) var(--space-6);
-            border-radius: 60px;
-            margin-top: var(--space-4);
-        }
-        .context-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-        }
-        .context-label { color: var(--gray-500); font-size: var(--text-sm); }
-        .context-value {
-            background: white;
-            padding: var(--space-1) var(--space-5);
-            border-radius: 60px;
-            font-weight: 600;
-            border: 1px solid var(--gray-200);
-        }
-
-        /* footer */
-        .footer {
-            text-align: center;
-            padding: var(--space-8);
-            background: var(--gray-50);
-            border-top: 1px solid var(--border-light);
-            color: var(--gray-500);
-        }
-        .footer-info {
-            background: white;
-            border-radius: var(--radius-full);
-            padding: var(--space-4) var(--space-8);
-            display: inline-block;
-            margin-top: var(--space-4);
-            border: 1px solid var(--gray-200);
-        }
-
-        /* responsive touches */
-        @media (max-width: 650px) {
-            .emotion-buttons { grid-template-columns: repeat(2,1fr); }
-            .chat-controls { flex-direction: column; align-items: stretch; }
-            .btn { justify-content: center; }
-            .current-context { flex-direction: column; gap: var(--space-3); border-radius: var(--radius-lg); }
-        }
-
-        /* Add this to your style.css or in the style section */
-.typing-dots {
-    display: flex;
-    gap: 8px;
-    padding: 8px 0;
-}
-
-.typing-dots span {
-    width: 10px;
-    height: 10px;
-    background: var(--primary);
-    border-radius: 50%;
-    animation: typingBounce 1.4s infinite ease-in-out both;
-}
-
-.typing-dots span:nth-child(1) {
-    animation-delay: -0.32s;
-}
-
-.typing-dots span:nth-child(2) {
-    animation-delay: -0.16s;
-}
-
-@keyframes typingBounce {
-    0%, 80%, 100% {
-        transform: scale(0);
-        opacity: 0.5;
-    }
-    40% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.btn.listening {
-    background: #e74c3c;
-    color: white;
-}
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
-    <!-- Header -->
+
+    <!-- ===== GLOBAL HEADER ===== -->
     <header class="header">
-        <h1>
-            <i class="fas fa-brain"></i> 
-            <span>AI Emotional Assistant</span>
-        </h1>
-        <p class="subtitle">proportional spacing · premium gradient · live empathy</p>
+        <div class="header-inner">
+            <h1>
+                <span class="header-icon-wrap"><i class="fas fa-brain"></i></span>
+                <span>EchoMind AI</span>
+            </h1>
+            <p class="subtitle">Live empathy engine &nbsp;·&nbsp; Adaptive responses &nbsp;·&nbsp; Real-time analysis</p>
+        </div>
     </header>
 
-    <!-- Main content -->
+    <!-- ===== DESKTOP 3-COLUMN MAIN ===== -->
     <main class="main-content">
-        <!-- Left: emotion panel -->
-        <section class="emotion-section">
-            <h2><i class="fas fa-heart-pulse"></i> Emotion Center</h2>
+
+        <!-- COL 1: EMOTION CONTEXT -->
+        <aside class="col col-emotion">
+            <div class="col-header">
+                <h2><i class="fas fa-heart-pulse"></i> Emotion Context</h2>
+            </div>
+
+            <!-- Current Emotion Display -->
             <div class="emotion-display-box">
                 <div class="emotion-icon-large" id="mainEmotionIcon"><i class="fas fa-meh"></i></div>
                 <div class="emotion-main-info">
-                    <h3>current state</h3>
+                    <span class="state-label">current state</span>
                     <div class="emotion-value-large" id="emotionValue">Neutral</div>
-                    <div class="confidence-display"><span>confidence</span> <span class="confidence-value" id="confidenceValue">94%</span></div>
+                    <div class="confidence-display">
+                        <span>confidence</span>
+                        <span class="confidence-value" id="confidenceValue">94%</span>
+                    </div>
                 </div>
             </div>
 
+            <!-- Emotion Buttons -->
             <div class="emotion-controls-panel">
-                <h3 style="margin-top:0;">select emotion</h3>
+                <div class="panel-label"><i class="fas fa-sliders"></i> Manual Override</div>
                 <div class="emotion-buttons">
                     <button class="emotion-btn happy-btn" data-emotion="happy"><i class="fas fa-smile"></i><span>Happy</span></button>
                     <button class="emotion-btn sad-btn" data-emotion="sad"><i class="fas fa-frown"></i><span>Sad</span></button>
@@ -608,32 +57,30 @@
                 </div>
                 <div class="auto-mode-control">
                     <label class="switch"><input type="checkbox" id="autoEmotionToggle"><span class="slider"></span></label>
-                    <span>auto‑rotate emotions</span>
+                    <span>Auto-rotate emotions</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- COL 2: LIVE CHAT -->
+        <section class="col col-chat">
+            <div class="col-header chat-col-header">
+                <h2><i class="fas fa-comment-dots"></i> Live Conversation</h2>
+                <div class="chat-header-meta">
+                    <div class="context-chip"><span class="chip-label">Emotion:</span><span class="chip-value" id="currentEmotionDisplay">neutral</span></div>
+                    <div class="context-chip"><span class="chip-label">Style:</span><span class="chip-value" id="responseStyle">warm &amp; analytical</span></div>
+                    <button id="clearChat" class="btn btn-icon" title="Clear"><i class="fas fa-trash-alt"></i></button>
+                    <button id="suggestTopic" class="btn btn-icon" title="Suggest"><i class="fas fa-lightbulb"></i></button>
                 </div>
             </div>
 
-            <!-- emotion bars -->
-            <div class="emotion-stats-container">
-                <h3 style="border-bottom:0; margin-bottom:var(--space-4);"><i class="fas fa-chart-simple"></i> intensity analysis</h3>
-                <div class="emotion-bars">
-                    <div class="emotion-bar-container"><span class="emotion-bar-label"><i class="fas fa-smile"></i> Happiness</span><div class="emotion-bar"><div class="emotion-bar-fill" id="happyBar" data-emotion="happy" style="width:72%"></div></div><span class="emotion-bar-value" id="happyValue">72%</span></div>
-                    <div class="emotion-bar-container"><span class="emotion-bar-label"><i class="fas fa-frown"></i> Sadness</span><div class="emotion-bar"><div class="emotion-bar-fill" id="sadBar" data-emotion="sad" style="width:14%"></div></div><span class="emotion-bar-value" id="sadValue">14%</span></div>
-                    <div class="emotion-bar-container"><span class="emotion-bar-label"><i class="fas fa-angry"></i> Anger</span><div class="emotion-bar"><div class="emotion-bar-fill" id="angryBar" data-emotion="angry" style="width:8%"></div></div><span class="emotion-bar-value" id="angryValue">8%</span></div>
-                    <div class="emotion-bar-container"><span class="emotion-bar-label"><i class="fas fa-surprise"></i> Surprise</span><div class="emotion-bar"><div class="emotion-bar-fill" id="surpriseBar" data-emotion="surprise" style="width:23%"></div></div><span class="emotion-bar-value" id="surpriseValue">23%</span></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Right: chat -->
-        <section class="chat-section">
-            <h2><i class="fas fa-comment-dots"></i> live conversation</h2>
             <div class="chat-container">
                 <div class="chat-messages" id="chatMessages">
                     <div class="message ai-message">
                         <div class="message-avatar"><i class="fas fa-robot"></i></div>
                         <div class="message-content">
                             <div class="message-sender"><i class="fas fa-robot"></i> assistant</div>
-                            <div class="message-text">Hi, I sense you're neutral. How can I help? (this UI uses fluid spacing & premium glass)</div>
+                            <div class="message-text">Hi, I sense you're neutral. How can I help?</div>
                             <div class="message-time"><i class="far fa-clock"></i> now</div>
                         </div>
                     </div>
@@ -641,33 +88,137 @@
 
                 <div class="chat-input-area">
                     <div class="input-group">
-                        <input type="text" id="userInput" placeholder="type your message..." autocomplete="off">
+                        <button id="voiceButton" class="btn btn-voice" title="Voice"><i class="fas fa-microphone"></i></button>
+                        <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
                         <button id="sendButton" class="btn btn-primary"><i class="fas fa-paper-plane"></i><span>Send</span></button>
                     </div>
-
-                    <div class="chat-controls">
-                        <div class="voice-control flex items-center gap-4">
-                            <button id="voiceButton" class="btn btn-voice"><i class="fas fa-microphone"></i><span>Voice</span></button>
-                            <div class="voice-status"><i class="fas fa-circle"></i><span>ready</span></div>
-                        </div>
-                        <div class="chat-actions flex gap-3">
-                            <button id="clearChat" class="btn"><i class="fas fa-trash-alt"></i>Clear</button>
-                            <button id="suggestTopic" class="btn"><i class="fas fa-lightbulb"></i>Suggest</button>
-                        </div>
-                    </div>
-
-                    <div class="current-context">
-                        <div class="context-item"><span class="context-label">current emotion:</span><span class="context-value" id="currentEmotionDisplay">neutral</span></div>
-                        <div class="context-item"><span class="context-label">response style:</span><span class="context-value" id="responseStyle">warm & analytical</span></div>
+                    <div class="voice-status-bar">
+                        <div class="voice-status"><i class="fas fa-circle"></i><span>ready</span></div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- COL 3: ANALYTICS PANEL -->
+        <aside class="col col-analytics">
+            <div class="col-header">
+                <h2><i class="fas fa-chart-simple"></i> Analytics Panel</h2>
+            </div>
+
+            <!-- Intensity Bars -->
+            <div class="analytics-block">
+                <div class="analytics-block-title">Intensity Analysis</div>
+                <div class="emotion-bars">
+                    <div class="emotion-bar-container">
+                        <span class="emotion-bar-label"><i class="fas fa-smile"></i> Happiness</span>
+                        <div class="emotion-bar"><div class="emotion-bar-fill" id="happyBar" data-emotion="happy" style="width:72%"></div></div>
+                        <span class="emotion-bar-value" id="happyValue">72%</span>
+                    </div>
+                    <div class="emotion-bar-container">
+                        <span class="emotion-bar-label"><i class="fas fa-frown"></i> Sadness</span>
+                        <div class="emotion-bar"><div class="emotion-bar-fill" id="sadBar" data-emotion="sad" style="width:14%"></div></div>
+                        <span class="emotion-bar-value" id="sadValue">14%</span>
+                    </div>
+                    <div class="emotion-bar-container">
+                        <span class="emotion-bar-label"><i class="fas fa-angry"></i> Anger</span>
+                        <div class="emotion-bar"><div class="emotion-bar-fill" id="angryBar" data-emotion="angry" style="width:8%"></div></div>
+                        <span class="emotion-bar-value" id="angryValue">8%</span>
+                    </div>
+                    <div class="emotion-bar-container">
+                        <span class="emotion-bar-label"><i class="fas fa-surprise"></i> Surprise</span>
+                        <div class="emotion-bar"><div class="emotion-bar-fill" id="surpriseBar" data-emotion="surprise" style="width:23%"></div></div>
+                        <span class="emotion-bar-value" id="surpriseValue">23%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confidence Block -->
+            <div class="analytics-block confidence-block">
+                <div class="analytics-block-title">Detection Confidence</div>
+                <div class="confidence-ring-wrap">
+                    <div class="confidence-ring">
+                        <svg viewBox="0 0 80 80">
+                            <circle cx="40" cy="40" r="32" class="ring-bg"/>
+                            <circle cx="40" cy="40" r="32" class="ring-fill" id="confidenceRing" stroke-dasharray="201" stroke-dashoffset="50"/>
+                        </svg>
+                        <div class="ring-label" id="confidenceRingLabel">94%</div>
+                    </div>
+                    <div class="confidence-meta">
+                        <div class="conf-stat"><span class="conf-stat-label">Status</span><span class="conf-stat-value success">High</span></div>
+                        <div class="conf-stat"><span class="conf-stat-label">Model</span><span class="conf-stat-value">v2.4</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insights Block -->
+            <div class="analytics-block insights-block">
+                <div class="analytics-block-title">Insights</div>
+                <div class="insight-item"><i class="fas fa-arrow-trend-up"></i><span>Positive trend detected</span></div>
+                <div class="insight-item"><i class="fas fa-bolt"></i><span>High engagement level</span></div>
+                <div class="insight-item"><i class="fas fa-shield-heart"></i><span>Stable emotional baseline</span></div>
+            </div>
+        </aside>
+
     </main>
 
+    <!-- ===== MOBILE EMOTION SECTION (only visible on mobile, below chat) ===== -->
+    <div class="mobile-emotion-section">
+        <details class="mobile-accordion" open>
+            <summary class="mobile-accordion-header">
+                <i class="fas fa-chart-bar"></i> Intensity Analysis
+                <i class="fas fa-chevron-down accordion-arrow"></i>
+            </summary>
+            <div class="mobile-accordion-body">
+                <div class="emotion-bars">
+                    <div class="emotion-bar-container">
+                        <span class="emotion-bar-label"><i class="fas fa-smile"></i> Happiness</span>
+                        <div class="emotion-bar"><div class="emotion-bar-fill" data-emotion="happy" style="width:72%"></div></div>
+                        <span class="emotion-bar-value">72%</span>
+                    </div>
+                    <div class="emotion-bar-container">
+                        <span class="emotion-bar-label"><i class="fas fa-frown"></i> Sadness</span>
+                        <div class="emotion-bar"><div class="emotion-bar-fill" data-emotion="sad" style="width:14%"></div></div>
+                        <span class="emotion-bar-value">14%</span>
+                    </div>
+                    <div class="emotion-bar-container">
+                        <span class="emotion-bar-label"><i class="fas fa-angry"></i> Anger</span>
+                        <div class="emotion-bar"><div class="emotion-bar-fill" data-emotion="angry" style="width:8%"></div></div>
+                        <span class="emotion-bar-value">8%</span>
+                    </div>
+                    <div class="emotion-bar-container">
+                        <span class="emotion-bar-label"><i class="fas fa-surprise"></i> Surprise</span>
+                        <div class="emotion-bar"><div class="emotion-bar-fill" data-emotion="surprise" style="width:23%"></div></div>
+                        <span class="emotion-bar-value">23%</span>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <details class="mobile-accordion">
+            <summary class="mobile-accordion-header">
+                <i class="fas fa-sliders"></i> Manual Override
+                <i class="fas fa-chevron-down accordion-arrow"></i>
+            </summary>
+            <div class="mobile-accordion-body">
+                <div class="auto-mode-control" style="margin-bottom:1rem;">
+                    <label class="switch"><input type="checkbox" id="autoEmotionToggleMobile"><span class="slider"></span></label>
+                    <span>Auto-rotate emotions</span>
+                </div>
+                <div class="emotion-buttons">
+                    <button class="emotion-btn happy-btn" data-emotion="happy"><i class="fas fa-smile"></i><span>Happy</span></button>
+                    <button class="emotion-btn sad-btn" data-emotion="sad"><i class="fas fa-frown"></i><span>Sad</span></button>
+                    <button class="emotion-btn angry-btn" data-emotion="angry"><i class="fas fa-angry"></i><span>Angry</span></button>
+                    <button class="emotion-btn surprise-btn" data-emotion="surprise"><i class="fas fa-surprise"></i><span>Surprise</span></button>
+                    <button class="emotion-btn neutral-btn" data-emotion="neutral"><i class="fas fa-meh"></i><span>Neutral</span></button>
+                    <button class="emotion-btn fear-btn" data-emotion="fear"><i class="fas fa-flushed"></i><span>Fear</span></button>
+                </div>
+            </div>
+        </details>
+    </div>
+
     <footer class="footer">
-        <p>proportional design · 8‑pt grid · every element balanced</p>
-        <div class="footer-info"><i class="fas fa-info-circle"></i> AI Emotional Assistant · professional interface with adaptive spacing</div>
+        <p>Proportional design &nbsp;·&nbsp; 8-pt grid &nbsp;·&nbsp; Every element balanced</p>
+        <div class="footer-info"><i class="fas fa-info-circle"></i> AI Emotional Assistant · Professional interface with adaptive spacing</div>
     </footer>
 </div>
 

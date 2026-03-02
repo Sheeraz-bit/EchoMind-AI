@@ -52,9 +52,15 @@ const emotionIcons = {
     disgust: 'fa-grimace'
 };
 
+// Detect if user is on mobile device
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     console.log('AI Emotional Assistant Initialized');
+    console.log('Device detected:', isMobileDevice() ? '📱 Mobile' : '💻 Desktop/Laptop');
     
     // Initialize with default emotion
     updateEmotionDisplay('neutral', 85);
@@ -65,16 +71,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize voice recognition
     initVoiceRecognition();
     
+    // Pre-load voices for mobile
+    if (isMobileDevice()) {
+        window.speechSynthesis.getVoices();
+    }
+    
     // Add welcome message
     setTimeout(() => {
-        addMessageToChat('You can click any emotion button to change my response style. Try saying "Hello" or asking "How are you?"', 'ai');
+        const welcomeMsg = isMobileDevice() 
+            ? "Welcome to AI Emotional Assistant! Tap any emotion button above to change how I respond. Try saying 'hello' or 'tell me a joke'!"
+            : "Welcome! You can click any emotion button to change my response style. Try saying 'Hello' or asking 'How are you?'";
+        addMessageToChat(welcomeMsg, 'ai');
     }, 1000);
 });
 
 // Set up all event listeners
 function setupEventListeners() {
     // Send message button
-    sendButton.addEventListener('click', sendMessage);
+    sendButton.addEventListener('click', function() {
+        sendMessage();
+    });
     
     // Send message on Enter key
     userInput.addEventListener('keypress', function(e) {
@@ -105,7 +121,10 @@ function setupEventListeners() {
             }
             
             // Add feedback message
-            addMessageToChat(`Emotion set to: ${emotion.charAt(0).toUpperCase() + emotion.slice(1)}. I will now respond accordingly.`, 'ai');
+            const feedbackMsg = isMobileDevice()
+                ? `Emotion set to ${emotion}! I'll respond with a ${getResponseStyle(emotion).toLowerCase()} tone.`
+                : `Emotion set to: ${emotion.charAt(0).toUpperCase() + emotion.slice(1)}. I will now respond accordingly.`;
+            addMessageToChat(feedbackMsg, 'ai');
         });
     });
     
@@ -378,7 +397,7 @@ function updateVoiceStatus(message, type) {
     voiceStatus.innerHTML = `<i class="fas ${icon}" style="color: ${color}"></i> ${message}`;
 }
 
-// Send message function
+// MAIN SEND MESSAGE FUNCTION (SINGLE VERSION)
 async function sendMessage() {
     if (!userInput || !chatMessages) return;
     
@@ -391,8 +410,8 @@ async function sendMessage() {
     showTypingIndicator();
 
     try {
-        // Try to use the server API if available
-        const response = await fetch('http://localhost:3000/api/chat', {
+        // Use relative path for API (works on both localhost and Render)
+        const response = await fetch('/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -401,34 +420,103 @@ async function sendMessage() {
                 message,
                 emotion: currentEmotion
             })
-        }).catch(() => null); // Catch network errors
+        }).catch(() => null);
 
         removeTypingIndicator();
 
         if (response && response.ok) {
             const data = await response.json();
-            const aiReply = data?.choices?.[0]?.message?.content || 
-                           "I received your message but couldn't generate a proper response.";
+            let aiReply = data?.choices?.[0]?.message?.content;
+            
+            // Check for generic response
+            const genericResponse = "Artificial Intelligence represents a significant technological advancement with applications across numerous fields and industries.";
+            
+            if (aiReply && aiReply.includes(genericResponse)) {
+                // Use enhanced responses
+                aiReply = getEnhancedResponse(message, currentEmotion);
+            }
+            
             addMessageToChat(aiReply, 'ai');
-            speakResponse(aiReply);
+            
+            // Handle voice based on device
+            if (isMobileDevice()) {
+                mobileSafeSpeak(aiReply);
+            } else {
+                speakResponse(aiReply);
+            }
         } else {
-            // Fallback to local response generation
-            const localResponse = getAIResponse(message);
+            // Use enhanced local responses
+            const localResponse = getEnhancedResponse(message, currentEmotion);
             addMessageToChat(localResponse, 'ai');
-            speakResponse(localResponse);
+            
+            if (isMobileDevice()) {
+                mobileSafeSpeak(localResponse);
+            } else {
+                speakResponse(localResponse);
+            }
         }
     } catch (error) {
         console.error('Error sending message:', error);
         removeTypingIndicator();
         
-        // Fallback to local response
-        const localResponse = getAIResponse(message);
+        const localResponse = getEnhancedResponse(message, currentEmotion);
         addMessageToChat(localResponse, 'ai');
-        speakResponse(localResponse);
+        
+        if (isMobileDevice()) {
+            mobileSafeSpeak(localResponse);
+        } else {
+            speakResponse(localResponse);
+        }
     }
 }
 
-// Get AI response with perfect English
+// Enhanced response generator (combines all your existing response functions)
+function getEnhancedResponse(message, emotion) {
+    const lowerMsg = message.toLowerCase().trim();
+    
+    // Check for greetings
+    if (isGreeting(lowerMsg)) {
+        return isMobileDevice() ? getMobileGreeting(emotion) : getGreetingResponse(emotion);
+    }
+    
+    // Check for common phrases
+    if (lowerMsg.includes('hello') || lowerMsg.includes('hi')) {
+        return isMobileDevice() ? getMobileGreeting(emotion) : getGreetingResponse(emotion);
+    }
+    
+    // Check for joke requests
+    if (lowerMsg.includes('joke') || lowerMsg.includes('funny')) {
+        return getRandomJoke();
+    }
+    
+    // Check for fact requests
+    if (lowerMsg.includes('fact') || lowerMsg.includes('interesting')) {
+        return getRandomFact();
+    }
+    
+    // Check for feelings
+    if (isFeelingExpression(lowerMsg)) {
+        return getFeelingResponse(lowerMsg, emotion);
+    }
+    
+    // Check for questions
+    if (isQuestion(lowerMsg)) {
+        return getQuestionResponse(lowerMsg, emotion);
+    }
+    
+    // Check for topics
+    const topicResponse = getTopicResponse(lowerMsg, emotion);
+    if (topicResponse) return topicResponse;
+    
+    // Default response
+    if (isMobileDevice()) {
+        return getMobileDefaultResponse(emotion);
+    } else {
+        return getContextualResponse(message, emotion);
+    }
+}
+
+// Get AI response with perfect English (keeping your original functions)
 function getAIResponse(message) {
     const lowerMsg = message.toLowerCase().trim();
     const emotion = currentEmotion;
@@ -764,6 +852,57 @@ function getEmotionGoodbye(emotion) {
     return goodbyes[emotion] || "I wish you well. ";
 }
 
+// Mobile-optimized response functions
+function getMobileGreeting(emotion) {
+    const greetings = {
+        happy: "Hey there! 😊 You seem happy today! What's on your mind?",
+        sad: "Hello! 💙 I'm here to listen if you want to talk about anything.",
+        angry: "Hi! 😤 Take a deep breath - I'm here to help however I can.",
+        surprise: "Hey! 😲 You seem surprised! What's going on?",
+        neutral: "Hello! 👋 Ready to chat? How can I help you today?",
+        fear: "Hi there! 🤗 Don't worry, I'm here to help. What's on your mind?"
+    };
+    return greetings[emotion] || greetings.neutral;
+}
+
+function getRandomFact() {
+    const facts = [
+        "Did you know? Honey never spoils! Archaeologists found 3000-year-old honey in Egyptian tombs that's still edible. 🍯",
+        "Fun fact: Octopuses have three hearts and blue blood! 🐙",
+        "Interesting: Bananas are berries, but strawberries aren't! 🍌",
+        "Did you know? A day on Venus is longer than its year! 🌕",
+        "Fun fact: The Eiffel Tower can grow up to 15cm taller in summer due to thermal expansion! 🗼",
+        "Cool fact: Your brain generates enough electricity to power a small lightbulb! 💡",
+        "Did you know? Humans share 60% of their DNA with bananas! 🧬"
+    ];
+    return facts[Math.floor(Math.random() * facts.length)];
+}
+
+function getRandomJoke() {
+    const jokes = [
+        "Why don't scientists trust atoms? Because they make up everything! 😄",
+        "What do you call a fake noodle? An impasta! 🍝",
+        "Why did the scarecrow win an award? He was outstanding in his field! 🌾",
+        "What do you call a bear with no teeth? A gummy bear! 🐻",
+        "Why don't eggs tell jokes? They'd crack each other up! 🥚",
+        "What do you call a sleeping bull? A bulldozer! 🐂",
+        "Why can't you give Elsa a balloon? Because she will let it go! 🎈"
+    ];
+    return jokes[Math.floor(Math.random() * jokes.length)];
+}
+
+function getMobileDefaultResponse(emotion) {
+    const responses = {
+        happy: "That's interesting! 😊 Tell me more about that!",
+        sad: "I understand. 💙 Would you like to talk more about this?",
+        angry: "I hear you. 😤 Let's talk it through - what's bothering you?",
+        surprise: "Wow! 😲 That's surprising! What happened next?",
+        neutral: "Interesting! 👋 What else is on your mind?",
+        fear: "I'm here for you. 🤗 Would discussing this help?"
+    };
+    return responses[emotion] || "Tell me more about that! I'm listening.";
+}
+
 // Add message to chat
 function addMessageToChat(message, sender) {
     if (!chatMessages) return;
@@ -825,85 +964,116 @@ function removeTypingIndicator() {
     }
 }
 
-// Speak response
-// Enhanced voice with emotion-based modulation
+// Desktop speak function
 function speakResponse(text) {
     if (!('speechSynthesis' in window)) {
         console.log('Speech synthesis not supported');
         return;
     }
 
-    window.speechSynthesis.cancel();
+    try {
+        window.speechSynthesis.cancel();
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    const voices = window.speechSynthesis.getVoices();
-    
-    // Voice settings based on current emotion
-    const voiceConfig = {
-        happy: { rate: 1.1, pitch: 1.2, volume: 1.0 },      // Faster, higher pitch
-        sad: { rate: 0.8, pitch: 0.9, volume: 0.9 },        // Slower, lower pitch
-        angry: { rate: 1.2, pitch: 1.1, volume: 1.0 },       // Faster, slightly higher
-        surprise: { rate: 1.3, pitch: 1.3, volume: 1.0 },    // Fast, high pitch
-        neutral: { rate: 0.95, pitch: 1.0, volume: 1.0 },    // Normal
-        fear: { rate: 0.9, pitch: 1.1, volume: 0.9 }         // Slightly shaky (rate variation)
-    };
-    
-    const config = voiceConfig[currentEmotion] || voiceConfig.neutral;
-    
-    // Priority list of most natural voices
-    const voicePriority = [
-        'Google UK English Female',  // Most natural
-        'Microsoft Hazel - English (Great Britain)',
-        'Google UK English Male',
-        'Microsoft Susan - English (United Kingdom)',
-        'Google US English',
-        'Microsoft Zira - English (United States)',
-        'Samantha',
-        'Alex'
-    ];
-    
-    // Find best voice
-    let selectedVoice = null;
-    for (const preferred of voicePriority) {
-        selectedVoice = voices.find(v => v.name.includes(preferred));
-        if (selectedVoice) break;
-    }
-    
-    if (!selectedVoice) {
-        selectedVoice = voices.find(v => v.lang.startsWith('en'));
-    }
-    
-    if (selectedVoice) {
-        utterance.voice = selectedVoice;
-    }
-    
-    // Apply emotion-based modulation
-    utterance.rate = config.rate;
-    utterance.pitch = config.pitch;
-    utterance.volume = config.volume;
-    
-    // Add natural speech patterns
-    if (currentEmotion === 'sad') {
-        utterance.text = text.replace(/\./g, '...');  // Add pauses for sadness
-    }
-    
-    if (currentEmotion === 'surprise') {
-        utterance.text = text.replace(/\./g, '!');    // More excitement
-    }
-    
-    // Handle voices loaded asynchronously
-    if (speechSynthesis.getVoices().length === 0) {
-        speechSynthesis.addEventListener('voiceschanged', () => {
-            const updatedVoices = speechSynthesis.getVoices();
-            const betterVoice = updatedVoices.find(v => 
-                v.name.includes('Google UK') || 
-                v.name.includes('Microsoft Hazel')
-            );
-            if (betterVoice) utterance.voice = betterVoice;
-            window.speechSynthesis.speak(utterance);
-        });
-    } else {
+        const utterance = new SpeechSynthesisUtterance(text);
+        const voices = window.speechSynthesis.getVoices();
+        
+        // Voice settings based on current emotion
+        const voiceConfig = {
+            happy: { rate: 1.1, pitch: 1.2, volume: 1.0 },
+            sad: { rate: 0.8, pitch: 0.9, volume: 0.9 },
+            angry: { rate: 1.2, pitch: 1.1, volume: 1.0 },
+            surprise: { rate: 1.3, pitch: 1.3, volume: 1.0 },
+            neutral: { rate: 0.95, pitch: 1.0, volume: 1.0 },
+            fear: { rate: 0.9, pitch: 1.1, volume: 0.9 }
+        };
+        
+        const config = voiceConfig[currentEmotion] || voiceConfig.neutral;
+        
+        // Priority list of most natural voices
+        const voicePriority = [
+            'Google UK English Female',
+            'Microsoft Hazel - English (Great Britain)',
+            'Google UK English Male',
+            'Microsoft Susan - English (United Kingdom)',
+            'Google US English',
+            'Microsoft Zira - English (United States)',
+            'Samantha',
+            'Alex'
+        ];
+        
+        // Find best voice
+        let selectedVoice = null;
+        for (const preferred of voicePriority) {
+            selectedVoice = voices.find(v => v.name && v.name.includes(preferred));
+            if (selectedVoice) break;
+        }
+        
+        if (!selectedVoice) {
+            selectedVoice = voices.find(v => v.lang && v.lang.startsWith('en'));
+        }
+        
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+        
+        // Apply emotion-based modulation
+        utterance.rate = config.rate;
+        utterance.pitch = config.pitch;
+        utterance.volume = config.volume;
+        
         window.speechSynthesis.speak(utterance);
+        
+    } catch (e) {
+        console.log('Speech error (safe to ignore):', e);
+    }
+}
+
+// Mobile-safe speech function
+function mobileSafeSpeak(text) {
+    if (!('speechSynthesis' in window)) {
+        console.log('Speech not supported on this device');
+        return;
+    }
+    
+    try {
+        window.speechSynthesis.cancel();
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        
+        // Get voices
+        const voices = window.speechSynthesis.getVoices();
+        
+        // Android prefers specific voices
+        const androidVoice = voices.find(v => 
+            v.name && v.name.includes('Google') && v.lang && v.lang.startsWith('en')
+        ) || voices.find(v => v.lang && v.lang.startsWith('en'));
+        
+        if (androidVoice) {
+            utterance.voice = androidVoice;
+        }
+        
+        // Softer settings for mobile
+        utterance.rate = 0.9;
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+        
+        utterance.onend = () => console.log('Mobile speech finished');
+        utterance.onerror = (e) => console.log('Mobile speech error (safe to ignore):', e);
+        
+        window.speechSynthesis.speak(utterance);
+        
+        // Fix for Android speech cutting off
+        const mobileKeepAlive = setInterval(() => {
+            if (!window.speechSynthesis.speaking) {
+                clearInterval(mobileKeepAlive);
+            } else {
+                window.speechSynthesis.pause();
+                window.speechSynthesis.resume();
+            }
+        }, 5000);
+        
+    } catch (e) {
+        console.log('Mobile speech failed (safe to ignore):', e);
     }
 }
 
@@ -918,33 +1088,32 @@ function clearChat() {
             </div>
             <div class="message-content">
                 <div class="message-sender">AI Assistant</div>
-                <div class="message-text">Chat cleared. Hello! I am your emotional AI assistant. You can manually set emotions using the buttons above, or enable auto-cycle mode.</div>
+                <div class="message-text">Chat cleared! 👋 I'm still here to help. How are you feeling?</div>
                 <div class="message-time">Just now</div>
             </div>
         </div>
     `;
     
     conversationHistory = [];
-    
-    // Add initial message
-    setTimeout(() => {
-        addMessageToChat('How may I assist you today?', 'ai');
-    }, 500);
 }
 
 // Suggest a conversation topic
 function suggestTopic() {
     const topics = [
         "How are you feeling today?",
-        "What has been on your mind recently?",
-        "Is there anything you would like to discuss or ask about?",
-        "How has your day been so far?",
-        "Is there a particular topic or question you would like to explore?",
-        "What are your thoughts on emotional intelligence?",
-        "How do you typically handle challenging emotions?",
-        "What brings you joy or satisfaction in daily life?"
+        "Tell me something interesting!",
+        "Tell me a joke!",
+        "What's your favorite color?",
+        "Do you like music?",
+        "What's the meaning of life?",
+        "Tell me a fun fact!"
     ];
     
     const randomTopic = topics[Math.floor(Math.random() * topics.length)];
-    addMessageToChat(`Conversation suggestion: ${randomTopic}`, 'ai');
+    userInput.value = randomTopic;
+    
+    // Auto-send on mobile for better UX
+    if (isMobileDevice() && randomTopic.length < 30) {
+        setTimeout(() => sendMessage(), 500);
+    }
 }
