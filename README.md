@@ -5,11 +5,17 @@
 Ready](https://img.shields.io/badge/mobile-optimized-brightgreen)
 ![Voice Enabled](https://img.shields.io/badge/voice-enabled-purple)
 
-<p align="center">
-<img src="./AI Emotional Assistant · professional UI - Google Chrome 3_2_2026 6_31_45 AM.png" alt="EchoMind AI Screenshot" width="800"/>
+::: {align="center"}
+`<img src="./AI Emotional Assistant · professional UI - Google Chrome 3_2_2026 6_31_45 AM.png" alt="EchoMind AI Screenshot" width="800"/>`{=html}
+```{=html}
+<p>
+```
+`<i>`{=html}EchoMind AI - Professional Interface with Emotional
+Intelligence`</i>`{=html}
+```{=html}
 </p>
-
-_EchoMind AI - Professional Interface with Emotional Intelligence_
+```
+:::
 
 A sophisticated AI Emotional Assistant that combines emotion detection
 with intelligent conversation. The system adapts its responses based on
