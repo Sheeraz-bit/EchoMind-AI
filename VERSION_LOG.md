@@ -142,8 +142,16 @@ _Released: February 26, 2026_
 
 ### 📁 Initial File Structure
 
-EchoMind-AI/ ├── server.js ├── public/ │ ├── index.html │ ├── style.css
-│ └── script.js ├── .env └── package.json
+    EchoMind-AI/
+    ├── server.js
+    ├── public/
+    │   ├── index.html
+    │   ├── style.css
+    │   └── script.js
+    ├── .env
+    ├── package.json
+    ├── README.md
+    └── VERSION_LOG.md
 
 ---
 
