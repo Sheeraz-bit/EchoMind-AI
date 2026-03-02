@@ -6,7 +6,7 @@ Ready](https://img.shields.io/badge/mobile-optimized-brightgreen)
 ![Voice Enabled](https://img.shields.io/badge/voice-enabled-purple)
 
 ::: {align="center"}
-`<img src="./AI Emotional Assistant · professional UI - Google Chrome 3_2_2026 6_31_45 AM.png" alt="EchoMind AI Screenshot" width="800"/>`{=html}
+`<img src="./AI Emotional Assistant · professional UI - Google Chrome 3_2_2026 6_31_45 AM.png" width="800"/>`{=html}
 ```{=html}
 <p>
 ```
