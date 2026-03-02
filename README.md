@@ -6,7 +6,7 @@ Ready](https://img.shields.io/badge/mobile-optimized-brightgreen)
 ![Voice Enabled](https://img.shields.io/badge/voice-enabled-purple)
 
 <p align="center">
-<img src="./assets/images/echomindVer3.png.png" alt="EchoMind AI Screenshot" width="800"/>
+<img src="./assets/images/echomindVer3.png" alt="EchoMind AI Screenshot" width="800"/>
 </p>
 
 _EchoMind AI - Professional Interface with Emotional Intelligence_
