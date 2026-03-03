@@ -1,6 +1,6 @@
 # EchoMind AI - Emotional Intelligence Assistant
 
-<a href="./VERSION_LOG.md">![Version](https://img.shields.io/badge/version-3.1.0-blue)</a>
+<a href="./changeLog.md">![Version](https://img.shields.io/badge/version-3.1.0-blue)</a>
 ![License](https://img.shields.io/badge/license-MIT-green) ![Mobile
 Ready](https://img.shields.io/badge/mobile-optimized-brightgreen)
 ![Voice Enabled](https://img.shields.io/badge/voice-enabled-purple)
@@ -126,7 +126,7 @@ EchoMind AI is fully optimized for mobile devices:
     ├── .env
     ├── package.json
     ├── README.md
-    └── VERSION_LOG.md
+    └── changeLog.md
 
 ## 🔧 Configuration
 
@@ -141,7 +141,7 @@ _Without API key, the system uses enhanced local responses_
 
 ## 📊 Version History
 
-<a href="./VERSION_LOG.md">Version Logs</a>
+<a href="./changeLog.md">Change Log</a>
 
 ### Version Evolution
 

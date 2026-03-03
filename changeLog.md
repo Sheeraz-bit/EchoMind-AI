@@ -1,4 +1,4 @@
-# EchoMind AI - Version History
+# EchoMind AI - Change Log
 
 ## 📱 Version 3.1.0 - Chat Scroll, Voice Fix & Mobile Layout Improvements
 
