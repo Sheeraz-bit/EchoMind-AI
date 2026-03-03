@@ -1,5 +1,32 @@
 # EchoMind AI - Version History
 
+## 📱 Version 3.1.0 - Chat Scroll, Voice Fix & Mobile Layout Improvements
+
+_Released: March 3, 2026_
+
+### 🚀 Major Improvements
+
+- Chat container now has a fixed height with a scrollbar (different for desktop and mobile)
+- Voice button fixed; audio input updates emotion and mood detection
+- Input area redesigned for small screens: voice/send buttons placed inside the text field
+- Mobile layout reworked: current state and emotion controls moved below fold with compact header
+- Intensity analysis and auto-rotate features now functional on mobile devices
+
+### 🎨 UI & Responsiveness
+
+- Responsive breakpoints adjusted for laptop vs mobile chat heights
+- Cleaner mobile input section reducing padding and wasted space
+- Emotion details/controls placed in scrollable section beneath chat
+
+### 🐛 Bug Fixes
+
+- Fixed chat container growing indefinitely as conversation continues
+- Resolved send button overflow on narrow screens
+- Auto-rotate toggle now responds on mobile
+- Intensity bars render correctly on mobile
+
+---
+
 ## 📱 Version 3.0.0 - Mobile Optimization & Enhanced UI (Current)
 
 _Released: March 2, 2026_
@@ -169,22 +196,27 @@ _Released: February 26, 2026_
 
 ## 📊 Version Comparison
 
-| Feature                  | v1.0 | v2.0 | v2.1 | v3.0 |
-| ------------------------ | :--: | :--: | :--: | :--: |
-| Basic Chat               |  ✅  |  ✅  |  ✅  |  ✅  |
-| Emotion Selection        |  ✅  |  ✅  |  ✅  |  ✅  |
-| Voice Input              |  ❌  |  ❌  |  ✅  |  ✅  |
-| Voice Output             |  ❌  |  ❌  |  ✅  |  ✅  |
-| 3D Animations            |  ❌  |  ✅  |  ✅  |  ✅  |
-| Mobile Optimized         |  ❌  |  ⚠️  |  ⚠️  |  ✅  |
-| Jokes & Facts            |  ❌  |  ❌  |  ❌  |  ✅  |
-| Emotion Voice Modulation |  ❌  |  ❌  |  ✅  |  ✅  |
-| Glass Morphism           |  ❌  |  ✅  |  ✅  |  ✅  |
-| Particle Effects         |  ❌  |  ✅  |  ✅  |  ✅  |
+| Feature                  | v1.0 | v2.0 | v2.1 | v3.0 | v3.1 |
+| ------------------------ | :--: | :--: | :--: | :--: | :--: |
+| Basic Chat               |  ✅  |  ✅  |  ✅  |  ✅  |  ✅  |
+| Emotion Selection        |  ✅  |  ✅  |  ✅  |  ✅  |  ✅  |
+| Voice Input              |  ❌  |  ❌  |  ⚠️  |  ⚠️  |  ✅  |
+| Voice Output             |  ❌  |  ❌  |  ✅  |  ✅  |  ✅  |
+| 3D Animations            |  ❌  |  ✅  |  ✅  |  ✅  |  ✅  |
+| Mobile Optimized system  |  ❌  |  ⚠️  |  ⚠️  |  ⚠️  |  ✅  |
+| Mobile Optimized UI      |  ❌  |  ⚠️  |  ⚠️  |  ⚠️  |  ✅  |
+| Jokes & Facts            |  ❌  |  ❌  |  ❌  |  ✅  |  ✅  |
+| Emotion Voice Modulation |  ❌  |  ❌  |  ✅  |  ✅  |  ✅  |
+| Glass Morphism           |  ❌  |  ✅  |  ✅  |  ✅  |  ✅  |
+| PWA support              |  ❌  |  ❌  |  ❌  |  ❌  |  ❌  |
+| Dark/light theme         |  ❌  |  ❌  |  ❌  |  ❌  |  ❌  |
+| User accounts            |  ❌  |  ❌  |  ❌  |  ❌  |  ❌  |
+| Custom voice model       |  ❌  |  ❌  |  ❌  |  ❌  |  ❌  |
+| Dark/light theme         |  ❌  |  ❌  |  ❌  |  ❌  |  ❌  |
 
 ---
 
-## 🐛 Known Issues (Version 3.0)
+## 🐛 Known Issues (Version 3.1)
 
 - **iOS Safari** - Minor voice delay on first use
 - **Firefox Mobile** - Speech synthesis requires user interaction

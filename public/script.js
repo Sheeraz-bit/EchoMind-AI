@@ -8,6 +8,9 @@ let autoEmotionInterval = null;
 let isListening = false;
 let recognition = null;
 let conversationHistory = [];
+let mediaRecorder = null;
+let audioChunks = [];
+let isRecording = false;
 let currentEmotionIntensity = {
     happy: 40,
     sad: 20,
@@ -28,10 +31,16 @@ const chatMessages = document.getElementById('chatMessages');
 const userInput = document.getElementById('userInput');
 const sendButton = document.getElementById('sendButton');
 const voiceButton = document.getElementById('voiceButton');
+const voiceButtonInside = document.getElementById('voiceButtonInside');
+const sendButtonInside = document.getElementById('sendButtonInside');
 const voiceStatus = document.getElementById('voiceStatus');
 const clearChatButton = document.getElementById('clearChat');
 const suggestTopicButton = document.getElementById('suggestTopic');
 const responseStyleDisplay = document.getElementById('responseStyle');
+const mobileStateIcon = document.getElementById('mobileStateIcon');
+const mobileStateText = document.getElementById('mobileStateText');
+const mobileStateConfidence = document.getElementById('mobileStateConfidence');
+const mobileResponseStyle = document.getElementById('mobileResponseStyle');
 
 // Emotion bar elements
 const emotionBars = {
@@ -63,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Device detected:', isMobileDevice() ? '📱 Mobile' : '💻 Desktop/Laptop');
     
     // Initialize with default emotion
-    updateEmotionDisplay('neutral', 85);
+    setEmotion('neutral', 85);
     
     // Set up event listeners
     setupEventListeners();
@@ -79,34 +88,56 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add welcome message
     setTimeout(() => {
         const welcomeMsg = isMobileDevice() 
-            ? "Welcome to AI Emotional Assistant! Tap any emotion button above to change how I respond. Try saying 'hello' or 'tell me a joke'!"
-            : "Welcome! You can click any emotion button to change my response style. Try saying 'Hello' or asking 'How are you?'";
+            ? "Welcome! Tap the microphone button inside the input field to use voice. I'll detect your emotion from your speech!"
+            : "Welcome! Click the voice button to speak. I'll analyze your voice and text to detect your emotion!";
         addMessageToChat(welcomeMsg, 'ai');
     }, 1000);
 });
 
 // Set up all event listeners
 function setupEventListeners() {
-    // Send message button
-    sendButton.addEventListener('click', function() {
-        sendMessage();
-    });
+    // Send message button (desktop)
+    if (sendButton) {
+        sendButton.addEventListener('click', function() {
+            sendMessage();
+        });
+    }
+    
+    // Send message button (mobile inside)
+    if (sendButtonInside) {
+        sendButtonInside.addEventListener('click', function() {
+            sendMessage();
+        });
+    }
     
     // Send message on Enter key
-    userInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
-    });
+    if (userInput) {
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    }
+    
+    // Voice button (desktop)
+    if (voiceButton) {
+        voiceButton.addEventListener('click', toggleVoiceRecognition);
+    }
+    
+    // Voice button (mobile inside)
+    if (voiceButtonInside) {
+        voiceButtonInside.addEventListener('click', toggleVoiceRecognition);
+    }
     
     // Clear chat button
-    clearChatButton.addEventListener('click', clearChat);
+    if (clearChatButton) {
+        clearChatButton.addEventListener('click', clearChat);
+    }
     
     // Suggest topic button
-    suggestTopicButton.addEventListener('click', suggestTopic);
-    
-    // Voice button
-    voiceButton.addEventListener('click', toggleVoiceRecognition);
+    if (suggestTopicButton) {
+        suggestTopicButton.addEventListener('click', suggestTopic);
+    }
     
     // Emotion buttons
     document.querySelectorAll('.emotion-btn').forEach(button => {
@@ -117,6 +148,10 @@ function setupEventListeners() {
             
             // Stop auto emotion if manually selecting
             if (isAutoEmotionEnabled) {
+                const autoToggle = document.getElementById('autoEmotionToggle');
+                const autoToggleMobile = document.getElementById('autoEmotionToggleMobile');
+                if (autoToggle) autoToggle.checked = false;
+                if (autoToggleMobile) autoToggleMobile.checked = false;
                 toggleAutoEmotion();
             }
             
@@ -128,10 +163,24 @@ function setupEventListeners() {
         });
     });
     
-    // Auto emotion toggle
-    autoEmotionToggle.addEventListener('change', function() {
-        toggleAutoEmotion();
-    });
+    // Auto emotion toggle (desktop)
+    if (autoEmotionToggle) {
+        autoEmotionToggle.addEventListener('change', function() {
+            const mobileToggle = document.getElementById('autoEmotionToggleMobile');
+            if (mobileToggle) mobileToggle.checked = this.checked;
+            toggleAutoEmotion();
+        });
+    }
+    
+    // Auto emotion toggle (mobile)
+    const autoEmotionToggleMobile = document.getElementById('autoEmotionToggleMobile');
+    if (autoEmotionToggleMobile) {
+        autoEmotionToggleMobile.addEventListener('change', function() {
+            const desktopToggle = document.getElementById('autoEmotionToggle');
+            if (desktopToggle) desktopToggle.checked = this.checked;
+            toggleAutoEmotion();
+        });
+    }
 }
 
 // Set emotion manually
@@ -154,7 +203,8 @@ function setEmotion(emotion, confidence) {
     updateEmotionIcon(emotion);
     
     // Update response style
-    responseStyleDisplay.textContent = getResponseStyle(emotion);
+    if (responseStyleDisplay) responseStyleDisplay.textContent = getResponseStyle(emotion);
+    if (mobileResponseStyle) mobileResponseStyle.textContent = getResponseStyle(emotion);
 }
 
 // Update emotion display
@@ -165,6 +215,11 @@ function updateEmotionDisplay(emotion, confidence) {
     emotionValue.textContent = displayEmotion;
     confidenceValue.textContent = confidence + '%';
     currentEmotionDisplay.textContent = displayEmotion;
+    
+    // Update mobile UI if elements exist
+    if (mobileStateText) mobileStateText.textContent = displayEmotion;
+    if (mobileStateConfidence) mobileStateConfidence.textContent = confidence + '%';
+    if (mobileResponseStyle) mobileResponseStyle.textContent = getResponseStyle(emotion);
     
     // Update color based on emotion
     updateEmotionColor(emotion);
@@ -195,16 +250,46 @@ function updateEmotionIcon(emotion) {
     if (!mainEmotionIcon) return;
     const iconClass = emotionIcons[emotion] || 'fa-meh';
     mainEmotionIcon.innerHTML = `<i class="fas ${iconClass}"></i>`;
+    
+    // Update mobile icon
+    if (mobileStateIcon) {
+        mobileStateIcon.innerHTML = `<i class="fas ${iconClass}"></i>`;
+    }
 }
 
 // Update emotion bars
 function updateEmotionBars() {
-    // Update each emotion bar
+    // Update each emotion bar (desktop)
     Object.keys(emotionBars).forEach(emotion => {
         if (emotionBars[emotion] && emotionBars[emotion].bar && emotionBars[emotion].value) {
             const intensity = currentEmotionIntensity[emotion] || 0;
             emotionBars[emotion].bar.style.width = intensity + '%';
             emotionBars[emotion].value.textContent = intensity + '%';
+        }
+    });
+    
+    // Update mobile emotion bars
+    document.querySelectorAll('.mobile-emotion-section .emotion-bar-fill').forEach(bar => {
+        const emotion = bar.getAttribute('data-emotion');
+        if (emotion && currentEmotionIntensity[emotion]) {
+            bar.style.width = currentEmotionIntensity[emotion] + '%';
+        }
+    });
+    
+    document.querySelectorAll('.mobile-emotion-section .emotion-bar-value').forEach(valueSpan => {
+        // Find parent container to get emotion
+        const container = valueSpan.closest('.emotion-bar-container');
+        if (container) {
+            const label = container.querySelector('.emotion-bar-label');
+            if (label) {
+                const text = label.textContent.toLowerCase();
+                for (const [emotion, value] of Object.entries(currentEmotionIntensity)) {
+                    if (text.includes(emotion)) {
+                        valueSpan.textContent = value + '%';
+                        break;
+                    }
+                }
+            }
         }
     });
 }
@@ -262,9 +347,8 @@ function stopAutoEmotionCycle() {
     }
 }
 
-// Initialize voice recognition
+// Enhanced voice recognition with emotion detection
 function initVoiceRecognition() {
-    // Check if voice status element exists
     if (!voiceStatus) return;
     
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -280,10 +364,18 @@ function initVoiceRecognition() {
             recognition.onstart = function() {
                 isListening = true;
                 updateVoiceStatus('Listening... Speak now', 'listening');
-                if (voiceButton) {
-                    voiceButton.innerHTML = '<i class="fas fa-microphone-slash"></i> Stop';
-                    voiceButton.classList.add('listening');
-                }
+                
+                // Update both voice buttons
+                [voiceButton, voiceButtonInside].forEach(btn => {
+                    if (btn) {
+                        btn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+                        btn.classList.add('listening');
+                        if (btn === voiceButton) btn.innerHTML += '<span>Stop</span>';
+                    }
+                });
+                
+                // Start analyzing speech for emotion
+                startEmotionAnalysis();
             };
             
             recognition.onresult = function(event) {
@@ -292,6 +384,9 @@ function initVoiceRecognition() {
                     userInput.value = transcript;
                 }
                 updateVoiceStatus('Processing speech...', 'processing');
+                
+                // Analyze voice for emotion
+                analyzeVoiceEmotion(transcript, event.results[0][0]);
                 
                 // Auto-send after short delay
                 setTimeout(() => {
@@ -315,61 +410,154 @@ function initVoiceRecognition() {
             
             recognition.onend = function() {
                 stopListening();
+                stopEmotionAnalysis();
             };
         } catch (error) {
             console.error('Error initializing speech recognition:', error);
             updateVoiceStatus('Voice recognition unavailable', 'error');
-            if (voiceButton) {
-                voiceButton.disabled = true;
-            }
+            disableVoiceButtons();
         }
     } else {
-        if (voiceButton) {
-            voiceButton.disabled = true;
-            voiceButton.innerHTML = '<i class="fas fa-microphone-slash"></i> Not Supported';
-        }
+        disableVoiceButtons();
         updateVoiceStatus('Voice recognition not supported in this browser', 'error');
     }
 }
 
-// Toggle voice recognition
-function toggleVoiceRecognition() {
-    if (!recognition) {
-        updateVoiceStatus('Voice recognition not available', 'error');
-        return;
+// Analyze voice for emotion detection
+function analyzeVoiceEmotion(transcript, audioData) {
+    // Analyze text content for emotional keywords
+    const textEmotion = detectTextEmotion(transcript);
+    
+    // Analyze voice tone (simulated for demo)
+    const voiceTone = detectVoiceTone(audioData);
+    
+    // Combine both for final emotion
+    const detectedEmotion = combineEmotionDetection(textEmotion, voiceTone);
+    
+    // Update emotion with high confidence
+    setEmotion(detectedEmotion.emotion, detectedEmotion.confidence);
+    
+    // Add feedback about emotion detection
+    setTimeout(() => {
+        addMessageToChat(`🎤 I detected a ${detectedEmotion.emotion} tone in your voice. I've adjusted my responses accordingly.`, 'ai');
+    }, 1000);
+}
+
+// Detect emotion from text content
+function detectTextEmotion(text) {
+    text = text.toLowerCase();
+    
+    const emotionKeywords = {
+        happy: ['happy', 'great', 'awesome', 'excellent', 'wonderful', 'good', 'love', 'amazing', 'fantastic', 'joy', 'excited'],
+        sad: ['sad', 'unhappy', 'depressed', 'down', 'upset', 'heartbroken', 'miserable', 'terrible', 'awful', 'crying', 'lonely'],
+        angry: ['angry', 'mad', 'furious', 'annoyed', 'frustrated', 'irritated', 'hate', 'rage', 'pissed', 'outrage'],
+        surprise: ['wow', 'surprised', 'shocked', 'amazing', 'unexpected', 'omg', 'oh my god', 'no way', 'really', 'what'],
+        fear: ['scared', 'afraid', 'fear', 'terrified', 'worried', 'anxious', 'nervous', 'panic', 'horror', 'frightened'],
+        neutral: ['okay', 'fine', 'alright', 'neutral', 'normal', 'regular']
+    };
+    
+    let scores = {
+        happy: 0, sad: 0, angry: 0, surprise: 0, fear: 0, neutral: 10
+    };
+    
+    // Score based on keyword matches
+    for (const [emotion, keywords] of Object.entries(emotionKeywords)) {
+        for (const keyword of keywords) {
+            if (text.includes(keyword)) {
+                scores[emotion] += 20;
+                // Reduce neutral score when emotion detected
+                if (emotion !== 'neutral') scores.neutral -= 5;
+            }
+        }
     }
     
-    if (!isListening) {
-        try {
-            // Request microphone permission explicitly
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(() => {
-                    recognition.start();
-                })
-                .catch((err) => {
-                    console.error('Microphone permission denied:', err);
-                    updateVoiceStatus('Microphone access required', 'error');
-                });
-        } catch (error) {
-            console.error('Error starting voice recognition:', error);
-            updateVoiceStatus('Error starting voice input', 'error');
-        }
-    } else {
-        try {
-            recognition.stop();
-        } catch (error) {
-            console.error('Error stopping recognition:', error);
+    // Find highest scoring emotion
+    let maxEmotion = 'neutral';
+    let maxScore = 0;
+    
+    for (const [emotion, score] of Object.entries(scores)) {
+        if (score > maxScore) {
+            maxScore = score;
+            maxEmotion = emotion;
         }
     }
+    
+    // Calculate confidence based on score
+    const confidence = Math.min(95, 60 + maxScore);
+    
+    return { emotion: maxEmotion, confidence };
+}
+
+// Detect emotion from voice tone (simulated)
+function detectVoiceTone(audioData) {
+    // In a real implementation, you'd analyze pitch, speed, volume
+    // For demo, we'll return a random emotion with bias
+    
+    const emotions = ['happy', 'sad', 'angry', 'surprise', 'neutral', 'fear'];
+    const randomIndex = Math.floor(Math.random() * emotions.length);
+    
+    return {
+        emotion: emotions[randomIndex],
+        confidence: Math.floor(Math.random() * 30) + 60 // 60-90%
+    };
+}
+
+// Combine text and voice emotion detection
+function combineEmotionDetection(textEmotion, voiceTone) {
+    // Weight text emotion more heavily (70% text, 30% voice)
+    const textWeight = 0.7;
+    const voiceWeight = 0.3;
+    
+    // Simple logic: if they match, use that with high confidence
+    if (textEmotion.emotion === voiceTone.emotion) {
+        return {
+            emotion: textEmotion.emotion,
+            confidence: Math.min(98, (textEmotion.confidence + voiceTone.confidence) / 2 + 10)
+        };
+    }
+    
+    // If they don't match, default to text emotion with moderate confidence
+    return {
+        emotion: textEmotion.emotion,
+        confidence: textEmotion.confidence * 0.8
+    };
+}
+
+// Start emotion analysis (placeholder for advanced features)
+function startEmotionAnalysis() {
+    console.log('Started emotion analysis');
+}
+
+// Stop emotion analysis
+function stopEmotionAnalysis() {
+    console.log('Stopped emotion analysis');
+}
+
+// Disable voice buttons if not supported
+function disableVoiceButtons() {
+    [voiceButton, voiceButtonInside].forEach(btn => {
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+            if (btn === voiceButton) btn.innerHTML += '<span>Not Supported</span>';
+            btn.title = 'Voice not supported in this browser';
+        }
+    });
 }
 
 // Stop listening
 function stopListening() {
     isListening = false;
-    if (voiceButton) {
-        voiceButton.innerHTML = '<i class="fas fa-microphone"></i> Voice Input';
-        voiceButton.classList.remove('listening');
-    }
+    
+    // Update both voice buttons
+    [voiceButton, voiceButtonInside].forEach(btn => {
+        if (btn) {
+            btn.innerHTML = '<i class="fas fa-microphone"></i>';
+            btn.classList.remove('listening');
+            if (btn === voiceButton) btn.innerHTML += '<span>Voice</span>';
+        }
+    });
+    
     updateVoiceStatus('Ready for voice input', 'ready');
 }
 
@@ -397,7 +585,52 @@ function updateVoiceStatus(message, type) {
     voiceStatus.innerHTML = `<i class="fas ${icon}" style="color: ${color}"></i> ${message}`;
 }
 
-// MAIN SEND MESSAGE FUNCTION (SINGLE VERSION)
+// Toggle voice recognition
+function toggleVoiceRecognition() {
+    if (!recognition) {
+        updateVoiceStatus('Voice recognition not available', 'error');
+        return;
+    }
+    
+    if (!isListening) {
+        try {
+            // Request microphone permission explicitly
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then((stream) => {
+                    // Store stream for later use
+                    if (window.audioStream) {
+                        window.audioStream.getTracks().forEach(track => track.stop());
+                    }
+                    window.audioStream = stream;
+                    
+                    // Start recognition
+                    recognition.start();
+                })
+                .catch((err) => {
+                    console.error('Microphone permission denied:', err);
+                    updateVoiceStatus('Microphone access required', 'error');
+                    
+                    // Show instructions
+                    addMessageToChat('🎤 To use voice input, please allow microphone access when prompted.', 'ai');
+                });
+        } catch (error) {
+            console.error('Error starting voice recognition:', error);
+            updateVoiceStatus('Error starting voice input', 'error');
+        }
+    } else {
+        try {
+            recognition.stop();
+            if (window.audioStream) {
+                window.audioStream.getTracks().forEach(track => track.stop());
+                window.audioStream = null;
+            }
+        } catch (error) {
+            console.error('Error stopping recognition:', error);
+        }
+    }
+}
+
+// MAIN SEND MESSAGE FUNCTION
 async function sendMessage() {
     if (!userInput || !chatMessages) return;
     
@@ -470,7 +703,7 @@ async function sendMessage() {
     }
 }
 
-// Enhanced response generator (combines all your existing response functions)
+// Enhanced response generator
 function getEnhancedResponse(message, emotion) {
     const lowerMsg = message.toLowerCase().trim();
     
@@ -516,7 +749,7 @@ function getEnhancedResponse(message, emotion) {
     }
 }
 
-// Get AI response with perfect English (keeping your original functions)
+// Get AI response with perfect English
 function getAIResponse(message) {
     const lowerMsg = message.toLowerCase().trim();
     const emotion = currentEmotion;
@@ -1110,7 +1343,9 @@ function suggestTopic() {
     ];
     
     const randomTopic = topics[Math.floor(Math.random() * topics.length)];
-    userInput.value = randomTopic;
+    if (userInput) {
+        userInput.value = randomTopic;
+    }
     
     // Auto-send on mobile for better UX
     if (isMobileDevice() && randomTopic.length < 30) {

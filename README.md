@@ -1,6 +1,6 @@
 # EchoMind AI - Emotional Intelligence Assistant
 
-<a href="./VERSION_LOG.md">![Version](https://img.shields.io/badge/version-3.0.0-blue)</a>
+<a href="./VERSION_LOG.md">![Version](https://img.shields.io/badge/version-3.1.0-blue)</a>
 ![License](https://img.shields.io/badge/license-MIT-green) ![Mobile
 Ready](https://img.shields.io/badge/mobile-optimized-brightgreen)
 ![Voice Enabled](https://img.shields.io/badge/voice-enabled-purple)
@@ -55,6 +55,7 @@ appropriate interactions across all devices.
 
 ### 📊 **Emotion Analysis**
 
+- **Fixed-height chat container** with scrollbar to keep layout stable
 - **Intensity Tracking** - Real-time emotion percentage bars
 - **Confidence Display** - AI confidence level for detected emotion
 - **Response Style Indicator** - Shows current AI communication style
@@ -109,6 +110,10 @@ EchoMind AI is fully optimized for mobile devices:
 - Mobile-Optimized Responses - Shorter, engaging replies
 - Safe Speech Synthesis - Works on Android and iOS
 - Responsive Layout - Adapts to any screen size
+- **Improved chat layout** – fixed-height message area with scrollbar and compact current-state header
+- **Input redesign** – voice/send buttons integrated into the text field on small screens
+- **Emotion controls deferred below fold** for a cleaner mobile chat experience
+- Intensity analysis and auto-rotate now function correctly on smartphones
 
 ## 🏗️ Architecture
 
@@ -134,7 +139,7 @@ EchoMind AI is fully optimized for mobile devices:
 
 _Without API key, the system uses enhanced local responses_
 
-## 📊 Version History 
+## 📊 Version History
 
 <a href="./VERSION_LOG.md">Version Logs</a>
 
@@ -153,8 +158,8 @@ _Without API key, the system uses enhanced local responses_
 <p><strong>Major UI Overhaul</strong><br/>3D Effects & Glass Morphism</p>
 </td>
 <td align="center" width="33%">
-<h3>v3.0.0</h3>
-<img src="./assets/images/echomindVer3.png" alt="EchoMind v3.0" width="100%"/>
+<h3>v3.1.0</h3>
+<img src="./assets/images/echomindVer3.png" alt="EchoMind v3.1" width="100%"/>
 <p><strong>Mobile Optimization</strong><br/>Enhanced UI (Current)</p>
 </td>
 </tr>
@@ -162,7 +167,8 @@ _Without API key, the system uses enhanced local responses_
 
 ### Release Timeline
 
-- v3.0.0 - Mobile Optimization & Enhanced UI (Current)
+- v3.1.0 - Chat Container Scroll, Voice Fixes & Mobile Layout Refinements (Current)
+- v3.0.0 - Mobile Optimization & Enhanced UI (Previous)
 - v2.1.0 - Voice Enhancement & Bug Fixes
 - v2.0.0 - Major UI Overhaul with 3D Effects
 - v1.1.0 - Voice Recognition & API Integration

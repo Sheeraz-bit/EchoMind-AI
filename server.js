@@ -9,6 +9,7 @@ const port = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
