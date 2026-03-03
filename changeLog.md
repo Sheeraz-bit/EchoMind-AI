@@ -65,8 +65,8 @@ _Released: March 2, 2026_
 ### 📊 Stats
 
 - Lines of code: \~2,500
-- Mobile compatibility: 100%
-- Voice success rate: 95%
+- Mobile compatibility: 80%
+- Voice success rate: 60%
 
 ---
 
