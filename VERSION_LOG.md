@@ -212,7 +212,6 @@ _Released: February 26, 2026_
 | Dark/light theme         |  ❌  |  ❌  |  ❌  |  ❌  |  ❌  |
 | User accounts            |  ❌  |  ❌  |  ❌  |  ❌  |  ❌  |
 | Custom voice model       |  ❌  |  ❌  |  ❌  |  ❌  |  ❌  |
-| Dark/light theme         |  ❌  |  ❌  |  ❌  |  ❌  |  ❌  |
 
 ---
 
