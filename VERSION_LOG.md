@@ -202,7 +202,9 @@ _Released: February 26, 2026_
 | Emotion Selection        |  ✅  |  ✅  |  ✅  |  ✅  |  ✅  |
 | Voice emotion detection  |  ❌  |  ❌  |  ⚠️  |  ⚠️  |  ✅  |
 | Voice Input              |  ❌  |  ❌  |  ⚠️  |  ⚠️  |  ✅  |
+| Voice Input on Mobile    |  ❌  |  ❌  |  ⚠️  |  ⚠️  |  ⚠️  |
 | Voice Output             |  ❌  |  ❌  |  ✅  |  ✅  |  ✅  |
+| Voice Outputon Mobile    |  ❌  |  ❌  |  ⚠️  |  ⚠️  |  ⚠️  |
 | 3D Animations            |  ❌  |  ✅  |  ✅  |  ✅  |  ✅  |
 | Mobile Optimized system  |  ❌  |  ⚠️  |  ⚠️  |  ⚠️  |  ✅  |
 | Mobile Optimized UI      |  ❌  |  ⚠️  |  ⚠️  |  ⚠️  |  ✅  |
