@@ -190,7 +190,8 @@ _Released: February 26, 2026_
 - [x] Dark/light theme toggle
 - [ ] PWA support for offline use
 - [ ] Export conversation feature
-- [x] Upgraded AI model
+- [x] Premium AI model
+- [x] Advance voice emotion detection
 
 ---
 
@@ -215,6 +216,7 @@ _Released: February 26, 2026_
 | Dark/light theme         |  ❌  |  ❌  |  ❌  |  ❌  |  ❌  |
 | User accounts            |  ❌  |  ❌  |  ❌  |  ❌  |  ❌  |
 | Custom voice model       |  ❌  |  ❌  |  ❌  |  ❌  |  ❌  |
+| AI model (openAi/gpt)    |  3.5-turbo  |  3.5-turbo  |  3.5-turbo  |  4o-mini  |  4o-mini  |
 
 ---
 
