@@ -7,8 +7,8 @@ _Released: March 3, 2026_
 ### 🚀 Major Improvements
 
 - Chat container now has a fixed height with a scrollbar (different for desktop and mobile)
-- Voice button fixed; audio input updates emotion and mood detection
-- Input area redesigned for small screens: voice/send buttons placed inside the text field
+- Voice button fixed; audio input updates emotion and mood detection (not working on mobile)
+- Input area redesigned for small screens
 - Mobile layout reworked: current state and emotion controls moved below fold with compact header
 - Intensity analysis and auto-rotate features now functional on mobile devices
 
