@@ -200,6 +200,7 @@ _Released: February 26, 2026_
 | ------------------------ | :--: | :--: | :--: | :--: | :--: |
 | Basic Chat               |  ✅  |  ✅  |  ✅  |  ✅  |  ✅  |
 | Emotion Selection        |  ✅  |  ✅  |  ✅  |  ✅  |  ✅  |
+| Voice emotion detection  |  ❌  |  ❌  |  ⚠️  |  ⚠️  |  ✅  |
 | Voice Input              |  ❌  |  ❌  |  ⚠️  |  ⚠️  |  ✅  |
 | Voice Output             |  ❌  |  ❌  |  ✅  |  ✅  |  ✅  |
 | 3D Animations            |  ❌  |  ✅  |  ✅  |  ✅  |  ✅  |

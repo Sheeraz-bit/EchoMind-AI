@@ -1,5 +1,4 @@
 // AI Emotional Assistant - COMPLETE WORKING VERSION
-// NO CAMERA REQUIRED - SIMULATED EMOTION DETECTION
 
 // Global variables
 let currentEmotion = 'neutral';
