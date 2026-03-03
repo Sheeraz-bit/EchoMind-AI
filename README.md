@@ -1,6 +1,6 @@
 # EchoMind AI - Emotional Intelligence Assistant
 
-![Version](https://img.shields.io/badge/version-3.0.0-blue)
+<a href="./VERSION_LOG.md">![Version](https://img.shields.io/badge/version-3.0.0-blue)</a>
 ![License](https://img.shields.io/badge/license-MIT-green) ![Mobile
 Ready](https://img.shields.io/badge/mobile-optimized-brightgreen)
 ![Voice Enabled](https://img.shields.io/badge/voice-enabled-purple)
