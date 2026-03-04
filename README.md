@@ -144,11 +144,11 @@ _Without API key, the system uses enhanced local responses_
 ### Change Logs
 
 - <a href="./changeLog.md#-version-310---chat-scroll-voice-fix--mobile-layout-improvements">v3.1.0</a>
-- <a href="">v3.0.0</a>
+- <a href="./changeLog.md#-version-300---mobile-optimization--enhanced-ui-current">v3.0.0</a>
 - <a href="./changeLog.md#-version-210---voice-enhancement--bug-fixes">v2.1.0</a>
-- <a href="./changeLog.md#-version-200---chat-scroll-voice-fix--mobile-layout-improvements">v2.0.0</a>
-- <a href="./changeLog.md#-version-110---chat-scroll-voice-fix--mobile-layout-improvements">v1.1.0</a>
-- <a href="./changeLog.md#-version-100---chat-scroll-voice-fix--mobile-layout-improvements">v1.0.0</a>
+- <a href="./changeLog.md#-version-200---major-ui-overhaul-with-3d-effects">v2.0.0</a>
+- <a href="./changeLog.md#-version-110---voice-recognition--api-integration">v1.1.0</a>
+- <a href="./changeLog.md#-version-100---initial-release">v1.0.0</a>
 
 ### Version Evolution
 
