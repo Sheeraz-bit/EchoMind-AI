@@ -145,7 +145,7 @@ _Without API key, the system uses enhanced local responses_
 
 - <a href="./changeLog.md#-version-310---chat-scroll-voice-fix--mobile-layout-improvements">v3.1.0</a>
 - <a href="">v3.0.0</a>
-- <a href="./changeLog.md#-version-210">v2.1.0</a>
+- <a href="./changeLog.md#-version-210---voice-enhancement--bug-fixes">v2.1.0</a>
 - <a href="./changeLog.md#-version-200---chat-scroll-voice-fix--mobile-layout-improvements">v2.0.0</a>
 - <a href="./changeLog.md#-version-110---chat-scroll-voice-fix--mobile-layout-improvements">v1.1.0</a>
 - <a href="./changeLog.md#-version-100---chat-scroll-voice-fix--mobile-layout-improvements">v1.0.0</a>
