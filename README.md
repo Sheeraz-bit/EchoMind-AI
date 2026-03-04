@@ -141,7 +141,7 @@ _Without API key, the system uses enhanced local responses_
 
 ## 📊 Version History
 
-- <a href="https://github.com/Sheeraz-bit/EchoMind-AI/blob/mai/changeLog.md#-version-310---chat-scroll-voice-fix--mobile-layout-improvements">Change Log v3.1</a>
+<a href="./changeLog.md#-version-310---chat-scroll-voice-fix--mobile-layout-improvements">Change Log v3.1</a>
 - <a href="https://github.com/Sheeraz-bit/EchoMind-AI/blob/mai/changeLog.md#-version-300---chat-scroll-voice-fix--mobile-layout-improvements">Change Log v3.0</a>
 - <a href="https://github.com/Sheeraz-bit/EchoMind-AI/blob/mai/changeLog.md#-version-210---chat-scroll-voice-fix--mobile-layout-improvements">Change Log v2.1</a>
 <a href="https://github.com/Sheeraz-bit/EchoMind-AI/blob/mai/changeLog.md#-version-200---chat-scroll-voice-fix--mobile-layout-improvements">Change Log v2.0</a>
