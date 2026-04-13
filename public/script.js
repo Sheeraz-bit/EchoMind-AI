@@ -1,4 +1,4 @@
-// AI Emotional Assistant - COMPLETE WORKING VERSION
+// AI Emotional Assistant - FIXED VERSION WITH PROPER EMOTION DETECTION
 
 // Global variables
 let currentEmotion = 'neutral';
@@ -60,6 +60,34 @@ const emotionIcons = {
     disgust: 'fa-grimace'
 };
 
+// Enhanced emotion keywords with weights
+const emotionKeywords = {
+    happy: {
+        keywords: ['happy', 'great', 'awesome', 'excellent', 'wonderful', 'good', 'love', 'amazing', 'fantastic', 'joy', 'excited', 'delighted', 'pleased', 'cheerful', 'thrilled', 'ecstatic'],
+        weight: 25
+    },
+    sad: {
+        keywords: ['sad', 'unhappy', 'depressed', 'down', 'upset', 'heartbroken', 'miserable', 'terrible', 'awful', 'crying', 'lonely', 'gloomy', 'melancholy', 'disappointed', 'hurt'],
+        weight: 25
+    },
+    angry: {
+        keywords: ['angry', 'mad', 'furious', 'annoyed', 'frustrated', 'irritated', 'hate', 'rage', 'pissed', 'outrage', 'resentful', 'bitter', 'enraged'],
+        weight: 25
+    },
+    surprise: {
+        keywords: ['wow', 'surprised', 'shocked', 'amazing', 'unexpected', 'omg', 'oh my god', 'no way', 'really', 'what', 'astonished', 'stunned', 'startled'],
+        weight: 20
+    },
+    fear: {
+        keywords: ['scared', 'afraid', 'fear', 'terrified', 'worried', 'anxious', 'nervous', 'panic', 'horror', 'frightened', 'dread', 'alarmed', 'uneasy'],
+        weight: 25
+    },
+    neutral: {
+        keywords: ['okay', 'fine', 'alright', 'neutral', 'normal', 'regular', 'standard', 'typical'],
+        weight: 15
+    }
+};
+
 // Detect if user is on mobile device
 function isMobileDevice() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -67,8 +95,8 @@ function isMobileDevice() {
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('AI Emotional Assistant Initialized');
-    console.log('Device detected:', isMobileDevice() ? '📱 Mobile' : '💻 Desktop/Laptop');
+    console.log('🤖 AI Emotional Assistant Initialized');
+    console.log('📱 Device detected:', isMobileDevice() ? 'Mobile' : 'Desktop/Laptop');
     
     // Initialize with default emotion
     setEmotion('neutral', 85);
@@ -87,10 +115,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add welcome message
     setTimeout(() => {
         const welcomeMsg = isMobileDevice() 
-            ? "Welcome! Tap the microphone button inside the input field to use voice. I'll detect your emotion from your speech!"
-            : "Welcome! Click the voice button to speak. I'll analyze your voice and text to detect your emotion!";
+            ? "👋 Welcome! Type a message with emotional keywords like 'happy', 'sad', or 'angry' and I'll detect your emotion! You can also use voice input."
+            : "👋 Welcome! Type messages with emotional keywords or use voice input. I'll detect your emotion from your words!";
         addMessageToChat(welcomeMsg, 'ai');
-    }, 1000);
+    }, 500);
 });
 
 // Set up all event listeners
@@ -114,6 +142,16 @@ function setupEventListeners() {
         userInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 sendMessage();
+            }
+        });
+        
+        // Real-time emotion detection as user types (optional)
+        userInput.addEventListener('input', function(e) {
+            const text = e.target.value;
+            if (text.length > 3) {
+                const detected = detectTextEmotion(text);
+                // Preview emotion (subtle hint)
+                console.log('📝 Detected emotion from text:', detected.emotion, 'Confidence:', detected.confidence);
             }
         });
     }
@@ -155,10 +193,7 @@ function setupEventListeners() {
             }
             
             // Add feedback message
-            const feedbackMsg = isMobileDevice()
-                ? `Emotion set to ${emotion}! I'll respond with a ${getResponseStyle(emotion).toLowerCase()} tone.`
-                : `Emotion set to: ${emotion.charAt(0).toUpperCase() + emotion.slice(1)}. I will now respond accordingly.`;
-            addMessageToChat(feedbackMsg, 'ai');
+            addMessageToChat(`✋ Emotion manually set to ${emotion}. I'll respond with a ${getResponseStyle(emotion).toLowerCase()} tone.`, 'ai');
         });
     });
     
@@ -182,6 +217,73 @@ function setupEventListeners() {
     }
 }
 
+// Enhanced emotion detection from text
+function detectTextEmotion(text) {
+    text = text.toLowerCase();
+    
+    let scores = {
+        happy: 0,
+        sad: 0,
+        angry: 0,
+        surprise: 0,
+        fear: 0,
+        neutral: 15 // Base neutral score
+    };
+    
+    // Score based on keyword matches with weights
+    for (const [emotion, data] of Object.entries(emotionKeywords)) {
+        for (const keyword of data.keywords) {
+            if (text.includes(keyword)) {
+                scores[emotion] += data.weight;
+                // Reduce neutral score when emotion detected
+                if (emotion !== 'neutral') {
+                    scores.neutral = Math.max(0, scores.neutral - 5);
+                }
+            }
+        }
+    }
+    
+    // Check for negations (e.g., "not happy")
+    const negations = ['not', 'no', 'never', 'hardly', 'barely', "don't", "doesn't", "didn't"];
+    negations.forEach(neg => {
+        if (text.includes(neg)) {
+            // Reduce positive emotions when negated
+            scores.happy = Math.max(0, scores.happy - 15);
+            scores.neutral += 10;
+        }
+    });
+    
+    // Find highest scoring emotion
+    let maxEmotion = 'neutral';
+    let maxScore = 0;
+    
+    for (const [emotion, score] of Object.entries(scores)) {
+        if (score > maxScore) {
+            maxScore = score;
+            maxEmotion = emotion;
+        }
+    }
+    
+    // Calculate confidence based on score
+    let confidence = 60; // Base confidence
+    if (maxScore > 0) {
+        confidence = Math.min(98, 60 + (maxScore * 1.5));
+    }
+    
+    console.log('🔍 Emotion Detection Results:', {
+        text: text,
+        scores: scores,
+        detected: maxEmotion,
+        confidence: Math.round(confidence)
+    });
+    
+    return { 
+        emotion: maxEmotion, 
+        confidence: Math.round(confidence),
+        scores: scores 
+    };
+}
+
 // Set emotion manually
 function setEmotion(emotion, confidence) {
     currentEmotion = emotion;
@@ -189,10 +291,17 @@ function setEmotion(emotion, confidence) {
     // Update emotion intensity
     currentEmotionIntensity[emotion] = confidence;
     
-    // Update other emotions with random lower values
+    // Update other emotions with contextual values
     Object.keys(currentEmotionIntensity).forEach(key => {
         if (key !== emotion && key !== 'neutral') {
-            currentEmotionIntensity[key] = Math.floor(Math.random() * 30);
+            // Set related emotions based on the main emotion
+            if (emotion === 'happy' && key === 'sad') {
+                currentEmotionIntensity[key] = Math.floor(Math.random() * 15);
+            } else if (emotion === 'sad' && key === 'happy') {
+                currentEmotionIntensity[key] = Math.floor(Math.random() * 15);
+            } else {
+                currentEmotionIntensity[key] = Math.floor(Math.random() * 25);
+            }
         }
     });
     
@@ -200,10 +309,35 @@ function setEmotion(emotion, confidence) {
     updateEmotionDisplay(emotion, confidence);
     updateEmotionBars();
     updateEmotionIcon(emotion);
+    updateConfidenceRing(confidence);
     
     // Update response style
     if (responseStyleDisplay) responseStyleDisplay.textContent = getResponseStyle(emotion);
     if (mobileResponseStyle) mobileResponseStyle.textContent = getResponseStyle(emotion);
+    
+    console.log('✅ Emotion set to:', emotion, 'Confidence:', confidence + '%');
+}
+
+// Update confidence ring
+function updateConfidenceRing(confidence) {
+    const ring = document.getElementById('confidenceRing');
+    const label = document.getElementById('confidenceRingLabel');
+    
+    if (ring && label) {
+        const circumference = 201; // 2 * π * 32
+        const offset = circumference - (confidence / 100) * circumference;
+        ring.style.strokeDashoffset = offset;
+        label.textContent = confidence + '%';
+        
+        // Update color based on confidence
+        if (confidence >= 80) {
+            ring.style.stroke = '#27ae60';
+        } else if (confidence >= 60) {
+            ring.style.stroke = '#f39c12';
+        } else {
+            ring.style.stroke = '#e74c3c';
+        }
+    }
 }
 
 // Update emotion display
@@ -264,6 +398,15 @@ function updateEmotionBars() {
             const intensity = currentEmotionIntensity[emotion] || 0;
             emotionBars[emotion].bar.style.width = intensity + '%';
             emotionBars[emotion].value.textContent = intensity + '%';
+            
+            // Update bar color based on emotion
+            const colors = {
+                happy: '#f39c12',
+                sad: '#3498db',
+                angry: '#e74c3c',
+                surprise: '#9b59b6'
+            };
+            emotionBars[emotion].bar.style.background = colors[emotion] || '#95a5a6';
         }
     });
     
@@ -272,11 +415,20 @@ function updateEmotionBars() {
         const emotion = bar.getAttribute('data-emotion');
         if (emotion && currentEmotionIntensity[emotion]) {
             bar.style.width = currentEmotionIntensity[emotion] + '%';
+            
+            // Update mobile bar colors
+            const colors = {
+                happy: '#f39c12',
+                sad: '#3498db',
+                angry: '#e74c3c',
+                surprise: '#9b59b6'
+            };
+            bar.style.background = colors[emotion] || '#95a5a6';
         }
     });
     
+    // Update mobile values
     document.querySelectorAll('.mobile-emotion-section .emotion-bar-value').forEach(valueSpan => {
-        // Find parent container to get emotion
         const container = valueSpan.closest('.emotion-bar-container');
         if (container) {
             const label = container.querySelector('.emotion-bar-label');
@@ -313,19 +465,16 @@ function toggleAutoEmotion() {
     isAutoEmotionEnabled = !isAutoEmotionEnabled;
     
     if (isAutoEmotionEnabled) {
-        // Start auto emotion cycle
         startAutoEmotionCycle();
-        addMessageToChat('Auto emotion cycling enabled. Emotions will change every 5 seconds.', 'ai');
+        addMessageToChat('🔄 Auto emotion cycling enabled. Emotions will change every 5 seconds.', 'ai');
     } else {
-        // Stop auto emotion cycle
         stopAutoEmotionCycle();
-        addMessageToChat('Auto emotion cycling disabled.', 'ai');
+        addMessageToChat('⏹️ Auto emotion cycling disabled.', 'ai');
     }
 }
 
 // Start auto emotion cycle
 function startAutoEmotionCycle() {
-    // Cycle through emotions
     const emotions = ['happy', 'sad', 'angry', 'surprise', 'neutral', 'fear'];
     let currentIndex = 0;
     
@@ -335,7 +484,7 @@ function startAutoEmotionCycle() {
         setEmotion(emotion, confidence);
         
         currentIndex = (currentIndex + 1) % emotions.length;
-    }, 5000); // Change every 5 seconds
+    }, 5000);
 }
 
 // Stop auto emotion cycle
@@ -346,7 +495,7 @@ function stopAutoEmotionCycle() {
     }
 }
 
-// Enhanced voice recognition with emotion detection
+// Initialize voice recognition with emotion detection
 function initVoiceRecognition() {
     if (!voiceStatus) return;
     
@@ -356,15 +505,14 @@ function initVoiceRecognition() {
         try {
             recognition = new SpeechRecognition();
             recognition.continuous = false;
-            recognition.interimResults = false;
+            recognition.interimResults = true; // Enable interim results for better detection
             recognition.lang = 'en-US';
-            recognition.maxAlternatives = 1;
+            recognition.maxAlternatives = 3;
             
             recognition.onstart = function() {
                 isListening = true;
-                updateVoiceStatus('Listening... Speak now', 'listening');
+                updateVoiceStatus('🎤 Listening... Speak clearly', 'listening');
                 
-                // Update both voice buttons
                 [voiceButton, voiceButtonInside].forEach(btn => {
                     if (btn) {
                         btn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
@@ -372,25 +520,40 @@ function initVoiceRecognition() {
                         if (btn === voiceButton) btn.innerHTML += '<span>Stop</span>';
                     }
                 });
-                
-                // Start analyzing speech for emotion
-                startEmotionAnalysis();
             };
             
             recognition.onresult = function(event) {
                 const transcript = event.results[0][0].transcript;
+                
+                // Detect emotion from transcript immediately
+                const detectedEmotion = detectTextEmotion(transcript);
+                
+                // Update emotion in real-time
+                setEmotion(detectedEmotion.emotion, detectedEmotion.confidence);
+                
                 if (userInput) {
                     userInput.value = transcript;
                 }
-                updateVoiceStatus('Processing speech...', 'processing');
                 
-                // Analyze voice for emotion
-                analyzeVoiceEmotion(transcript, event.results[0][0]);
+                updateVoiceStatus('✅ Speech detected! Processing...', 'processing');
                 
-                // Auto-send after short delay
-                setTimeout(() => {
-                    sendMessage();
-                }, 800);
+                // Show detected emotion
+                if (event.results[0].isFinal) {
+                    addMessageToChat(`🎤 Voice detected: "${transcript}"`, 'user');
+                    
+                    // Add emotion detection feedback
+                    setTimeout(() => {
+                        addMessageToChat(
+                            `🔍 I detected a ${detectedEmotion.emotion} tone (${detectedEmotion.confidence}% confidence). Responding accordingly...`,
+                            'ai'
+                        );
+                        
+                        // Auto-send after showing detection
+                        setTimeout(() => {
+                            sendMessage();
+                        }, 500);
+                    }, 300);
+                }
             };
             
             recognition.onerror = function(event) {
@@ -398,9 +561,9 @@ function initVoiceRecognition() {
                 
                 let errorMessage = 'Voice input error';
                 if (event.error === 'not-allowed') {
-                    errorMessage = 'Microphone access denied. Please allow microphone access.';
+                    errorMessage = '❌ Microphone access denied. Please allow microphone access.';
                 } else if (event.error === 'no-speech') {
-                    errorMessage = 'No speech detected. Please try again.';
+                    errorMessage = '❌ No speech detected. Please try again.';
                 }
                 
                 updateVoiceStatus(errorMessage, 'error');
@@ -409,7 +572,6 @@ function initVoiceRecognition() {
             
             recognition.onend = function() {
                 stopListening();
-                stopEmotionAnalysis();
             };
         } catch (error) {
             console.error('Error initializing speech recognition:', error);
@@ -420,116 +582,6 @@ function initVoiceRecognition() {
         disableVoiceButtons();
         updateVoiceStatus('Voice recognition not supported in this browser', 'error');
     }
-}
-
-// Analyze voice for emotion detection
-function analyzeVoiceEmotion(transcript, audioData) {
-    // Analyze text content for emotional keywords
-    const textEmotion = detectTextEmotion(transcript);
-    
-    // Analyze voice tone (simulated for demo)
-    const voiceTone = detectVoiceTone(audioData);
-    
-    // Combine both for final emotion
-    const detectedEmotion = combineEmotionDetection(textEmotion, voiceTone);
-    
-    // Update emotion with high confidence
-    setEmotion(detectedEmotion.emotion, detectedEmotion.confidence);
-    
-    // Add feedback about emotion detection
-    setTimeout(() => {
-        addMessageToChat(`🎤 I detected a ${detectedEmotion.emotion} tone in your voice. I've adjusted my responses accordingly.`, 'ai');
-    }, 1000);
-}
-
-// Detect emotion from text content
-function detectTextEmotion(text) {
-    text = text.toLowerCase();
-    
-    const emotionKeywords = {
-        happy: ['happy', 'great', 'awesome', 'excellent', 'wonderful', 'good', 'love', 'amazing', 'fantastic', 'joy', 'excited'],
-        sad: ['sad', 'unhappy', 'depressed', 'down', 'upset', 'heartbroken', 'miserable', 'terrible', 'awful', 'crying', 'lonely'],
-        angry: ['angry', 'mad', 'furious', 'annoyed', 'frustrated', 'irritated', 'hate', 'rage', 'pissed', 'outrage'],
-        surprise: ['wow', 'surprised', 'shocked', 'amazing', 'unexpected', 'omg', 'oh my god', 'no way', 'really', 'what'],
-        fear: ['scared', 'afraid', 'fear', 'terrified', 'worried', 'anxious', 'nervous', 'panic', 'horror', 'frightened'],
-        neutral: ['okay', 'fine', 'alright', 'neutral', 'normal', 'regular']
-    };
-    
-    let scores = {
-        happy: 0, sad: 0, angry: 0, surprise: 0, fear: 0, neutral: 10
-    };
-    
-    // Score based on keyword matches
-    for (const [emotion, keywords] of Object.entries(emotionKeywords)) {
-        for (const keyword of keywords) {
-            if (text.includes(keyword)) {
-                scores[emotion] += 20;
-                // Reduce neutral score when emotion detected
-                if (emotion !== 'neutral') scores.neutral -= 5;
-            }
-        }
-    }
-    
-    // Find highest scoring emotion
-    let maxEmotion = 'neutral';
-    let maxScore = 0;
-    
-    for (const [emotion, score] of Object.entries(scores)) {
-        if (score > maxScore) {
-            maxScore = score;
-            maxEmotion = emotion;
-        }
-    }
-    
-    // Calculate confidence based on score
-    const confidence = Math.min(95, 60 + maxScore);
-    
-    return { emotion: maxEmotion, confidence };
-}
-
-// Detect emotion from voice tone (simulated)
-function detectVoiceTone(audioData) {
-    // In a real implementation, you'd analyze pitch, speed, volume
-    // For demo, we'll return a random emotion with bias
-    
-    const emotions = ['happy', 'sad', 'angry', 'surprise', 'neutral', 'fear'];
-    const randomIndex = Math.floor(Math.random() * emotions.length);
-    
-    return {
-        emotion: emotions[randomIndex],
-        confidence: Math.floor(Math.random() * 30) + 60 // 60-90%
-    };
-}
-
-// Combine text and voice emotion detection
-function combineEmotionDetection(textEmotion, voiceTone) {
-    // Weight text emotion more heavily (70% text, 30% voice)
-    const textWeight = 0.7;
-    const voiceWeight = 0.3;
-    
-    // Simple logic: if they match, use that with high confidence
-    if (textEmotion.emotion === voiceTone.emotion) {
-        return {
-            emotion: textEmotion.emotion,
-            confidence: Math.min(98, (textEmotion.confidence + voiceTone.confidence) / 2 + 10)
-        };
-    }
-    
-    // If they don't match, default to text emotion with moderate confidence
-    return {
-        emotion: textEmotion.emotion,
-        confidence: textEmotion.confidence * 0.8
-    };
-}
-
-// Start emotion analysis (placeholder for advanced features)
-function startEmotionAnalysis() {
-    console.log('Started emotion analysis');
-}
-
-// Stop emotion analysis
-function stopEmotionAnalysis() {
-    console.log('Stopped emotion analysis');
 }
 
 // Disable voice buttons if not supported
@@ -548,7 +600,6 @@ function disableVoiceButtons() {
 function stopListening() {
     isListening = false;
     
-    // Update both voice buttons
     [voiceButton, voiceButtonInside].forEach(btn => {
         if (btn) {
             btn.innerHTML = '<i class="fas fa-microphone"></i>';
@@ -557,19 +608,12 @@ function stopListening() {
         }
     });
     
-    updateVoiceStatus('Ready for voice input', 'ready');
+    updateVoiceStatus('🎙️ Ready for voice input', 'ready');
 }
 
 // Update voice status
 function updateVoiceStatus(message, type) {
     if (!voiceStatus) return;
-    
-    const icons = {
-        listening: 'fa-circle',
-        processing: 'fa-circle',
-        error: 'fa-exclamation-circle',
-        ready: 'fa-circle'
-    };
     
     const colors = {
         listening: '#e74c3c',
@@ -578,10 +622,9 @@ function updateVoiceStatus(message, type) {
         ready: '#27ae60'
     };
     
-    const icon = icons[type] || 'fa-circle';
     const color = colors[type] || '#27ae60';
     
-    voiceStatus.innerHTML = `<i class="fas ${icon}" style="color: ${color}"></i> ${message}`;
+    voiceStatus.innerHTML = `<i class="fas fa-circle" style="color: ${color}"></i><span>${message}</span>`;
 }
 
 // Toggle voice recognition
@@ -593,23 +636,17 @@ function toggleVoiceRecognition() {
     
     if (!isListening) {
         try {
-            // Request microphone permission explicitly
             navigator.mediaDevices.getUserMedia({ audio: true })
                 .then((stream) => {
-                    // Store stream for later use
                     if (window.audioStream) {
                         window.audioStream.getTracks().forEach(track => track.stop());
                     }
                     window.audioStream = stream;
-                    
-                    // Start recognition
                     recognition.start();
                 })
                 .catch((err) => {
                     console.error('Microphone permission denied:', err);
                     updateVoiceStatus('Microphone access required', 'error');
-                    
-                    // Show instructions
                     addMessageToChat('🎤 To use voice input, please allow microphone access when prompted.', 'ai');
                 });
         } catch (error) {
@@ -629,20 +666,32 @@ function toggleVoiceRecognition() {
     }
 }
 
-// MAIN SEND MESSAGE FUNCTION
+// MAIN SEND MESSAGE FUNCTION with emotion detection
 async function sendMessage() {
     if (!userInput || !chatMessages) return;
     
     const message = userInput.value.trim();
     if (!message) return;
-
+    
+    // Detect emotion from the message BEFORE sending
+    const detectedEmotion = detectTextEmotion(message);
+    
+    // Update the emotion based on the message
+    setEmotion(detectedEmotion.emotion, detectedEmotion.confidence);
+    
+    // Add user message to chat
     addMessageToChat(message, 'user');
     userInput.value = '';
-
+    
+    // Show emotion detection feedback
+    setTimeout(() => {
+        const emotionFeedback = `🔍 I detected a ${detectedEmotion.emotion} tone in your message (${detectedEmotion.confidence}% confidence)`;
+        addMessageToChat(emotionFeedback, 'ai');
+    }, 300);
+    
     showTypingIndicator();
-
+    
     try {
-        // Use relative path for API (works on both localhost and Render)
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: {
@@ -653,40 +702,35 @@ async function sendMessage() {
                 emotion: currentEmotion
             })
         }).catch(() => null);
-
+        
         removeTypingIndicator();
-
+        
+        let aiReply;
+        
         if (response && response.ok) {
             const data = await response.json();
-            let aiReply = data?.choices?.[0]?.message?.content;
+            aiReply = data?.choices?.[0]?.message?.content;
             
             // Check for generic response
-            const genericResponse = "Artificial Intelligence represents a significant technological advancement with applications across numerous fields and industries.";
+            const genericResponse = "Artificial Intelligence represents a significant technological advancement";
             
-            if (aiReply && aiReply.includes(genericResponse)) {
-                // Use enhanced responses
+            if (!aiReply || aiReply.includes(genericResponse)) {
                 aiReply = getEnhancedResponse(message, currentEmotion);
             }
-            
-            addMessageToChat(aiReply, 'ai');
-            
-            // Handle voice based on device
-            if (isMobileDevice()) {
-                mobileSafeSpeak(aiReply);
-            } else {
-                speakResponse(aiReply);
-            }
         } else {
-            // Use enhanced local responses
-            const localResponse = getEnhancedResponse(message, currentEmotion);
-            addMessageToChat(localResponse, 'ai');
-            
-            if (isMobileDevice()) {
-                mobileSafeSpeak(localResponse);
-            } else {
-                speakResponse(localResponse);
-            }
+            aiReply = getEnhancedResponse(message, currentEmotion);
         }
+        
+        // Add AI response
+        addMessageToChat(aiReply, 'ai');
+        
+        // Voice response
+        if (isMobileDevice()) {
+            mobileSafeSpeak(aiReply);
+        } else {
+            speakResponse(aiReply);
+        }
+        
     } catch (error) {
         console.error('Error sending message:', error);
         removeTypingIndicator();
@@ -740,76 +784,12 @@ function getEnhancedResponse(message, emotion) {
     const topicResponse = getTopicResponse(lowerMsg, emotion);
     if (topicResponse) return topicResponse;
     
-    // Default response
+    // Default response with emotion context
     if (isMobileDevice()) {
         return getMobileDefaultResponse(emotion);
     } else {
         return getContextualResponse(message, emotion);
     }
-}
-
-// Get AI response with perfect English
-function getAIResponse(message) {
-    const lowerMsg = message.toLowerCase().trim();
-    const emotion = currentEmotion;
-    
-    // Check for exact matches first
-    const exactResponses = getExactMatchResponses(lowerMsg, emotion);
-    if (exactResponses) return exactResponses;
-    
-    // Check for greeting patterns
-    if (isGreeting(lowerMsg)) {
-        return getGreetingResponse(emotion);
-    }
-    
-    // Check for feeling expressions
-    if (isFeelingExpression(lowerMsg)) {
-        return getFeelingResponse(lowerMsg, emotion);
-    }
-    
-    // Check for questions
-    if (isQuestion(lowerMsg)) {
-        return getQuestionResponse(lowerMsg, emotion);
-    }
-    
-    // Check for specific topics
-    const topicResponse = getTopicResponse(lowerMsg, emotion);
-    if (topicResponse) return topicResponse;
-    
-    // Default contextual response
-    return getContextualResponse(message, emotion);
-}
-
-// Check for exact matches
-function getExactMatchResponses(message, emotion) {
-    const exactMatches = {
-        // Greetings
-        'hello': getGreetingResponse(emotion),
-        'hi': getGreetingResponse(emotion),
-        'hey': getGreetingResponse(emotion),
-        'good morning': getGreetingResponse(emotion),
-        'good afternoon': getGreetingResponse(emotion),
-        'good evening': getGreetingResponse(emotion),
-        
-        // Common questions
-        'how are you': `I am functioning optimally, thank you for asking. ${getEmotionContext(emotion)}How are you feeling today?`,
-        'what is your name': "I am an Emotional AI Assistant designed to provide meaningful conversation and support based on emotional context.",
-        'who are you': "I am an AI assistant specialized in emotional intelligence and contextual response generation.",
-        
-        // Simple responses
-        'thank you': "You are most welcome. I am pleased to be of assistance.",
-        'thanks': "You're welcome. Is there anything else I can help you with?",
-        'bye': `Goodbye. ${getEmotionGoodbye(emotion)}Thank you for the conversation.`,
-        'goodbye': `Farewell. ${getEmotionGoodbye(emotion)}It was a pleasure speaking with you.`,
-        
-        // Emotions
-        'i am happy': "That is wonderful to hear! Happiness is a positive state that enhances overall wellbeing. What is contributing to your happiness today?",
-        'i am sad': "I understand you are feeling sad. It is completely natural to experience sadness at times. Would you like to discuss what is troubling you?",
-        'i am angry': "I acknowledge your feelings of anger. It can be helpful to identify the source of frustration and address it constructively.",
-        'i am tired': "Fatigue can affect both physical and mental wellbeing. Adequate rest and self-care are important for maintaining balance."
-    };
-    
-    return exactMatches[message] || null;
 }
 
 // Check if message is a greeting
@@ -823,8 +803,8 @@ function getGreetingResponse(emotion) {
     const greetings = [
         `Hello! ${getEmotionContext(emotion)}How may I assist you today?`,
         `Greetings! ${getEmotionContext(emotion)}What would you like to discuss?`,
-        `Good day! ${getEmotionContext(emotion)}I am ready to help with any questions or concerns you may have.`,
-        `Hello there! ${getEmotionContext(emotion)}I am your emotional AI assistant. How can I be of service?`
+        `Good day! ${getEmotionContext(emotion)}I'm ready to help with any questions or concerns.`,
+        `Hello there! ${getEmotionContext(emotion)}I'm your emotional AI assistant. How can I help?`
     ];
     
     return greetings[Math.floor(Math.random() * greetings.length)];
@@ -845,7 +825,6 @@ function isFeelingExpression(message) {
 
 // Get feeling response
 function getFeelingResponse(message, emotion) {
-    // Extract the feeling from the message
     let feeling = '';
     
     const patterns = [
@@ -867,44 +846,25 @@ function getFeelingResponse(message, emotion) {
         }
     }
     
-    // Common feelings and their responses
     const feelingResponses = {
-        // Positive feelings
-        'happy': "That is excellent! Positive emotions contribute to overall wellbeing. What specifically is bringing you happiness?",
-        'good': "I am pleased to hear you are doing well. Maintaining positive states benefits both mental and physical health.",
-        'great': "Wonderful! It is always encouraging to hear when someone is experiencing positive emotions.",
+        'happy': "That's excellent! Positive emotions contribute to overall wellbeing. What's bringing you happiness?",
+        'good': "I'm pleased to hear you're doing well. Maintaining positive states benefits both mental and physical health.",
+        'great': "Wonderful! It's always encouraging to hear when someone is experiencing positive emotions.",
         'excited': "Excitement often accompanies new opportunities or positive developments. What has you feeling excited?",
-        'joyful': "Joy is a profound positive emotion that enriches life experience. Cherish these moments.",
-        
-        // Negative feelings
-        'sad': "I understand you are experiencing sadness. These feelings are valid and important to acknowledge. Would discussing them help?",
-        'bad': "I am sorry to hear you are not feeling well. Difficult emotions are a natural part of human experience.",
+        'sad': "I understand you're experiencing sadness. These feelings are valid and important to acknowledge. Would discussing them help?",
+        'bad': "I'm sorry to hear you're not feeling well. Difficult emotions are a natural part of human experience.",
         'angry': "Anger can signal that something important needs attention. Understanding the source can lead to constructive solutions.",
-        'mad': "Feelings of anger are natural responses to certain situations. It may help to explore what triggered this response.",
         'tired': "Fatigue affects many aspects of life. Adequate rest and self-care practices can help restore energy levels.",
-        'exhausted': "Exhaustion can be both physical and emotional. Prioritizing rest and recovery is essential.",
         'anxious': "Anxiety can be challenging to manage. Focusing on breathing and present moment awareness sometimes helps.",
-        'nervous': "Nervousness often accompanies new experiences or important events. It typically decreases with familiarity.",
-        'worried': "Worry focuses attention on potential problems. Sometimes examining worst-case scenarios realistically can reduce anxiety.",
         'stressed': "Stress is a common response to demands. Identifying specific stressors can help develop coping strategies.",
-        'lonely': "Feelings of loneliness are common and valid. Human connection, even virtual, can help alleviate these feelings.",
-        'bored': "Boredom can signal a need for engagement or novelty. Sometimes it sparks creativity or new interests.",
-        'confused': "Confusion often precedes understanding. Breaking complex matters into smaller parts can sometimes bring clarity.",
-        
-        // Neutral feelings
-        'okay': "That is reasonable. Many people experience neutral or okay states frequently.",
-        'fine': "Being fine is a stable state that allows for productivity and routine activities.",
-        'alright': "Alright is a satisfactory state that provides a foundation for daily functioning.",
-        'neutral': "Neutral states provide emotional balance and stability, which can be beneficial for clear thinking."
+        'lonely': "Feelings of loneliness are common and valid. Human connection, even virtual, can help alleviate these feelings."
     };
     
-    // Return specific response if feeling is recognized
     if (feeling && feelingResponses[feeling]) {
         return feelingResponses[feeling];
     }
     
-    // Default feeling response
-    return `Thank you for sharing how you feel. ${getEmotionContext(emotion)}Is there anything specific you would like to discuss regarding these feelings?`;
+    return `Thank you for sharing how you feel. ${getEmotionContext(emotion)}Is there anything specific you'd like to discuss?`;
 }
 
 // Check if message is a question
@@ -917,56 +877,29 @@ function isQuestion(message) {
            message.startsWith('where') || 
            message.startsWith('who') || 
            message.startsWith('can you') ||
-           message.startsWith('could you') ||
-           message.startsWith('would you');
+           message.startsWith('could you');
 }
 
 // Get question response
 function getQuestionResponse(message, emotion) {
     const questionMap = {
-        // What questions
-        'what can you do': "I can engage in meaningful conversation, provide emotional support based on context, answer questions across various topics, and adapt my responses based on emotional states.",
-        'what is this': "This is an Emotional AI Assistant interface that simulates emotion detection and provides contextually appropriate responses.",
-        'what is emotion': "Emotions are complex psychological and physiological states that influence thoughts, behaviors, and decisions. They serve important functions in human experience.",
-        'what is ai': "Artificial Intelligence refers to computer systems designed to perform tasks requiring human-like intelligence, such as understanding language and recognizing patterns.",
-        'what is mental health': "Mental health encompasses emotional, psychological, and social wellbeing. It affects how we think, feel, and act in daily life.",
-        
-        // How questions
-        'how does this work': "This system uses simulated emotion states to demonstrate how emotional context can enhance AI interactions and response appropriateness.",
-        'how are you': `I am functioning optimally, thank you. ${getEmotionContext(emotion)}How are you feeling today?`,
-        'how can i be happy': "Happiness often involves gratitude, meaningful connections, engaging activities, physical wellbeing, and perspective. Small daily practices can contribute significantly.",
-        'how can i improve': "Self-improvement typically involves setting clear goals, developing consistent habits, seeking knowledge, and practicing self-compassion during the process.",
-        'how do i deal with': "Challenges often benefit from clear problem definition, consideration of multiple perspectives, breaking issues into manageable parts, and seeking appropriate support.",
-        
-        // Why questions
-        'why am i': "Self-understanding is a complex process that involves reflection, experience, and sometimes professional guidance. Our feelings and behaviors have multiple influencing factors.",
-        'why do i feel': "Feelings arise from complex interactions between thoughts, experiences, physiology, and circumstances. Understanding specific contexts often provides insight.",
-        'why is this happening': "Situations typically have multiple contributing factors. Systematic examination of circumstances can sometimes reveal patterns or causes.",
-        
-        // Can/Could questions
-        'can you help': `Certainly. ${getEmotionContext(emotion)}Please specify what kind of assistance you require, and I will do my best to provide helpful information or guidance.`,
-        'could you explain': "I would be pleased to provide explanation. Please specify the topic or concept you would like me to elaborate on.",
-        'would you tell me': "I am happy to share information. Please let me know what specific topic or question you have in mind.",
-        
-        // General knowledge
-        'what time is it': `The current time is ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}. ${getEmotionContext(emotion)}`,
-        'what day is it': `Today is ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}. ${getEmotionContext(emotion)}`,
-        'what is the weather': "I do not have real-time weather data access. However, weather often significantly influences mood and daily activities.",
-        'what should i do': "Decision-making depends on individual circumstances, values, and goals. Sometimes listing options and considering consequences can provide clarity."
+        'what can you do': "I can engage in meaningful conversation, detect emotions from your words, provide emotional support, and adapt my responses based on your emotional state.",
+        'what is this': "This is an Emotional AI Assistant that detects emotions from your messages and voice, providing contextually appropriate responses.",
+        'how are you': `I'm functioning optimally, thank you. ${getEmotionContext(emotion)}How are you feeling today?`,
+        'how does this work': "I analyze your words for emotional keywords and patterns, then adjust my responses to match your emotional state for more empathetic interaction.",
+        'can you help': `Certainly. ${getEmotionContext(emotion)}Please specify what kind of assistance you need.`
     };
     
-    // Check for exact question matches
     for (const [question, response] of Object.entries(questionMap)) {
         if (message.includes(question)) {
             return response;
         }
     }
     
-    // Default question response
     const defaultResponses = [
-        `That is an interesting question. ${getEmotionContext(emotion)}Could you elaborate on what specifically you would like to know?`,
-        `I appreciate your inquiry. ${getEmotionContext(emotion)}My knowledge on this topic may be limited, but I will provide the most accurate information available to me.`,
-        `Thank you for your question. ${getEmotionContext(emotion)}This is a thoughtful topic worthy of consideration and discussion.`
+        `That's an interesting question. ${getEmotionContext(emotion)}Could you elaborate?`,
+        `I appreciate your inquiry. ${getEmotionContext(emotion)}Let me provide the best answer I can.`,
+        `Thank you for your question. ${getEmotionContext(emotion)}This is a thoughtful topic to discuss.`
     ];
     
     return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
@@ -975,39 +908,12 @@ function getQuestionResponse(message, emotion) {
 // Get topic-specific response
 function getTopicResponse(message, emotion) {
     const topics = {
-        // Technology
-        'technology': "Technology continues to evolve rapidly, influencing how we communicate, work, and understand the world around us.",
-        'computer': "Computers have transformed modern society, enabling unprecedented information access and communication capabilities.",
-        'internet': "The internet has created global connectivity, fundamentally changing how we access information and interact with others.",
-        'ai': "Artificial Intelligence represents a significant technological advancement with applications across numerous fields and industries.",
-        
-        // Health and wellness
+        'technology': "Technology continues to evolve rapidly, influencing how we communicate, work, and understand the world.",
+        'ai': "Artificial Intelligence represents a significant advancement, with applications across numerous fields and industries.",
         'health': "Health encompasses physical, mental, and social wellbeing. Balanced nutrition, exercise, and rest contribute to overall health.",
-        'exercise': "Regular physical activity provides numerous benefits including improved mood, increased energy, and better overall health.",
-        'sleep': "Adequate sleep is essential for cognitive function, emotional regulation, and physical recovery. Most adults require 7-9 hours nightly.",
-        'diet': "Balanced nutrition provides necessary nutrients for bodily functions and can significantly impact energy levels and overall wellbeing.",
-        'meditation': "Meditation practices can reduce stress, improve focus, and enhance emotional regulation through mindfulness and awareness.",
-        
-        // Psychology
-        'psychology': "Psychology studies mind and behavior, examining how people think, feel, and act individually and in social contexts.",
-        'emotion': "Emotions are complex responses involving physiological, cognitive, and behavioral components that influence decision-making and social interactions.",
-        'mindfulness': "Mindfulness involves present-moment awareness without judgment, often reducing stress and improving emotional regulation.",
-        'therapy': "Therapeutic approaches provide structured support for addressing psychological challenges and developing coping strategies.",
-        
-        // Daily life
-        'work': "Work provides structure, purpose, and resources. Balance between work and personal life contributes to overall satisfaction.",
-        'study': "Learning involves acquiring knowledge and skills through study, experience, or teaching. Effective strategies enhance retention and understanding.",
-        'relationship': "Relationships involve connection, communication, and mutual understanding between individuals, contributing significantly to life satisfaction.",
-        'family': "Family relationships provide fundamental social connections that influence development, support systems, and personal identity.",
-        'friend': "Friendships offer social support, shared experiences, and mutual understanding outside family relationships.",
-        
-        // Current events
-        'news': "Staying informed about current events is valuable, though balancing information consumption with emotional wellbeing is important.",
-        'weather': "Weather conditions influence daily activities, mood, and planning. Seasonal changes often affect energy levels and routines.",
-        'travel': "Travel exposes individuals to new cultures, perspectives, and experiences, often broadening understanding and creating memories."
+        'emotion': "Emotions are complex responses involving physiological, cognitive, and behavioral components that influence decision-making."
     };
     
-    // Check for topic keywords
     for (const [topic, response] of Object.entries(topics)) {
         if (message.includes(topic)) {
             return `${response} ${getEmotionContext(emotion)}`;
@@ -1017,13 +923,13 @@ function getTopicResponse(message, emotion) {
     return null;
 }
 
-// Get contextual response for non-specific messages
+// Get contextual response
 function getContextualResponse(message, emotion) {
     const responses = {
         happy: [
             `"${message}" - Thank you for sharing. Your positive perspective enhances our conversation.`,
-            `I appreciate you mentioning "${message}". It is encouraging to discuss this while you are in a positive state.`,
-            `Thank you for discussing "${message}". Your optimistic approach to this topic is noticeable and appreciated.`
+            `I appreciate you mentioning "${message}". It's encouraging to discuss this while you're in a positive state.`,
+            `Thank you for discussing "${message}". Your optimistic approach is noticeable and appreciated.`
         ],
         sad: [
             `Regarding "${message}" - I understand this topic may have particular significance given your current emotional state.`,
@@ -1035,11 +941,6 @@ function getContextualResponse(message, emotion) {
             `Regarding "${message}" - Your strong feelings about this are noted. Exploring this further might provide clarity.`,
             `Thank you for expressing this: "${message}". Addressing difficult topics honestly is important.`
         ],
-        surprise: [
-            `"${message}" - That is unexpected information. How do you feel about this development?`,
-            `Regarding "${message}" - This surprising topic raises interesting considerations for discussion.`,
-            `"${message}" - This unexpected mention introduces new dimensions to our conversation.`
-        ],
         neutral: [
             `Thank you for mentioning: "${message}". I appreciate your contribution to our discussion.`,
             `Regarding "${message}" - This is a reasonable point for consideration and discussion.`,
@@ -1047,12 +948,7 @@ function getContextualResponse(message, emotion) {
         ]
     };
     
-    const emotionResponses = responses[emotion] || [
-        `Thank you for sharing: "${message}". I appreciate our conversation.`,
-        `Regarding "${message}" - This contributes meaningfully to our discussion.`,
-        `"${message}" - Thank you for this thoughtful contribution to our conversation.`
-    ];
-    
+    const emotionResponses = responses[emotion] || responses.neutral;
     return emotionResponses[Math.floor(Math.random() * emotionResponses.length)];
 }
 
@@ -1063,25 +959,11 @@ function getEmotionContext(emotion) {
         sad: "I understand you may be experiencing difficult emotions. ",
         angry: "I acknowledge the intensity of your current emotional state. ",
         surprise: "You seem surprised or particularly engaged. ",
-        neutral: "I am attentive to your needs and perspectives. ",
-        fear: "I sense some apprehension in your current state. ",
-        disgust: "I notice signals of strong emotional response. "
+        neutral: "I'm attentive to your needs and perspectives. ",
+        fear: "I sense some apprehension in your current state. "
     };
     
-    return contexts[emotion] || "I am focused on providing meaningful response. ";
-}
-
-// Get emotion-based goodbye
-function getEmotionGoodbye(emotion) {
-    const goodbyes = {
-        happy: "I hope your positive mood continues. ",
-        sad: "Remember that difficult emotions typically pass with time and perspective. ",
-        angry: "I hope you find constructive ways to process and address these feelings. ",
-        surprise: "I hope whatever surprised you leads to positive outcomes. ",
-        neutral: "I wish you a productive and balanced day. "
-    };
-    
-    return goodbyes[emotion] || "I wish you well. ";
+    return contexts[emotion] || "I'm focused on providing a meaningful response. ";
 }
 
 // Mobile-optimized response functions
@@ -1103,9 +985,7 @@ function getRandomFact() {
         "Fun fact: Octopuses have three hearts and blue blood! 🐙",
         "Interesting: Bananas are berries, but strawberries aren't! 🍌",
         "Did you know? A day on Venus is longer than its year! 🌕",
-        "Fun fact: The Eiffel Tower can grow up to 15cm taller in summer due to thermal expansion! 🗼",
-        "Cool fact: Your brain generates enough electricity to power a small lightbulb! 💡",
-        "Did you know? Humans share 60% of their DNA with bananas! 🧬"
+        "Fun fact: The Eiffel Tower can grow up to 15cm taller in summer due to thermal expansion! 🗼"
     ];
     return facts[Math.floor(Math.random() * facts.length)];
 }
@@ -1116,9 +996,7 @@ function getRandomJoke() {
         "What do you call a fake noodle? An impasta! 🍝",
         "Why did the scarecrow win an award? He was outstanding in his field! 🌾",
         "What do you call a bear with no teeth? A gummy bear! 🐻",
-        "Why don't eggs tell jokes? They'd crack each other up! 🥚",
-        "What do you call a sleeping bull? A bulldozer! 🐂",
-        "Why can't you give Elsa a balloon? Because she will let it go! 🎈"
+        "Why don't eggs tell jokes? They'd crack each other up! 🥚"
     ];
     return jokes[Math.floor(Math.random() * jokes.length)];
 }
@@ -1157,8 +1035,6 @@ function addMessageToChat(message, sender) {
     `;
     
     chatMessages.appendChild(messageElement);
-    
-    // Scroll to bottom
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
@@ -1202,14 +1078,13 @@ function speakResponse(text) {
         console.log('Speech synthesis not supported');
         return;
     }
-
+    
     try {
         window.speechSynthesis.cancel();
-
+        
         const utterance = new SpeechSynthesisUtterance(text);
         const voices = window.speechSynthesis.getVoices();
         
-        // Voice settings based on current emotion
         const voiceConfig = {
             happy: { rate: 1.1, pitch: 1.2, volume: 1.0 },
             sad: { rate: 0.8, pitch: 0.9, volume: 0.9 },
@@ -1221,34 +1096,11 @@ function speakResponse(text) {
         
         const config = voiceConfig[currentEmotion] || voiceConfig.neutral;
         
-        // Priority list of most natural voices
-        const voicePriority = [
-            'Google UK English Female',
-            'Microsoft Hazel - English (Great Britain)',
-            'Google UK English Male',
-            'Microsoft Susan - English (United Kingdom)',
-            'Google US English',
-            'Microsoft Zira - English (United States)',
-            'Samantha',
-            'Alex'
-        ];
-        
-        // Find best voice
-        let selectedVoice = null;
-        for (const preferred of voicePriority) {
-            selectedVoice = voices.find(v => v.name && v.name.includes(preferred));
-            if (selectedVoice) break;
-        }
-        
-        if (!selectedVoice) {
-            selectedVoice = voices.find(v => v.lang && v.lang.startsWith('en'));
-        }
-        
+        const selectedVoice = voices.find(v => v.lang && v.lang.startsWith('en'));
         if (selectedVoice) {
             utterance.voice = selectedVoice;
         }
         
-        // Apply emotion-based modulation
         utterance.rate = config.rate;
         utterance.pitch = config.pitch;
         utterance.volume = config.volume;
@@ -1256,7 +1108,7 @@ function speakResponse(text) {
         window.speechSynthesis.speak(utterance);
         
     } catch (e) {
-        console.log('Speech error (safe to ignore):', e);
+        console.log('Speech error:', e);
     }
 }
 
@@ -1271,11 +1123,8 @@ function mobileSafeSpeak(text) {
         window.speechSynthesis.cancel();
         
         const utterance = new SpeechSynthesisUtterance(text);
-        
-        // Get voices
         const voices = window.speechSynthesis.getVoices();
         
-        // Android prefers specific voices
         const androidVoice = voices.find(v => 
             v.name && v.name.includes('Google') && v.lang && v.lang.startsWith('en')
         ) || voices.find(v => v.lang && v.lang.startsWith('en'));
@@ -1284,28 +1133,14 @@ function mobileSafeSpeak(text) {
             utterance.voice = androidVoice;
         }
         
-        // Softer settings for mobile
         utterance.rate = 0.9;
         utterance.pitch = 1.0;
         utterance.volume = 1.0;
         
-        utterance.onend = () => console.log('Mobile speech finished');
-        utterance.onerror = (e) => console.log('Mobile speech error (safe to ignore):', e);
-        
         window.speechSynthesis.speak(utterance);
         
-        // Fix for Android speech cutting off
-        const mobileKeepAlive = setInterval(() => {
-            if (!window.speechSynthesis.speaking) {
-                clearInterval(mobileKeepAlive);
-            } else {
-                window.speechSynthesis.pause();
-                window.speechSynthesis.resume();
-            }
-        }, 5000);
-        
     } catch (e) {
-        console.log('Mobile speech failed (safe to ignore):', e);
+        console.log('Mobile speech failed:', e);
     }
 }
 
@@ -1320,7 +1155,7 @@ function clearChat() {
             </div>
             <div class="message-content">
                 <div class="message-sender">AI Assistant</div>
-                <div class="message-text">Chat cleared! 👋 I'm still here to help. How are you feeling?</div>
+                <div class="message-text">Chat cleared! 👋 I'm still here to help. Type a message with emotional keywords like "happy", "sad", or "angry" and I'll detect your emotion!</div>
                 <div class="message-time">Just now</div>
             </div>
         </div>
@@ -1332,22 +1167,22 @@ function clearChat() {
 // Suggest a conversation topic
 function suggestTopic() {
     const topics = [
-        "How are you feeling today?",
-        "Tell me something interesting!",
+        "I'm feeling happy today!",
+        "I'm a bit sad about something",
         "Tell me a joke!",
-        "What's your favorite color?",
-        "Do you like music?",
-        "What's the meaning of life?",
-        "Tell me a fun fact!"
+        "I'm feeling angry about work",
+        "Tell me an interesting fact!",
+        "I'm feeling anxious",
+        "How are you?",
+        "I'm excited about something!"
     ];
     
     const randomTopic = topics[Math.floor(Math.random() * topics.length)];
     if (userInput) {
         userInput.value = randomTopic;
+        userInput.focus();
     }
     
-    // Auto-send on mobile for better UX
-    if (isMobileDevice() && randomTopic.length < 30) {
-        setTimeout(() => sendMessage(), 500);
-    }
+    // Highlight that this will trigger emotion detection
+    addMessageToChat(`💡 Try sending: "${randomTopic}" - I'll detect the emotion from your words!`, 'ai');
 }
