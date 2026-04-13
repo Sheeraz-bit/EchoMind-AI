@@ -21,7 +21,7 @@ app.post('/api/chat', async (req, res) => {
 
         console.log("Message:", message);
         console.log("Emotion:", emotion);
-        console.log("API key loaded:", !!process.env.OPENROUTER_API_KEY);
+        console.log("OpenRouter API key loaded:", !!process.env.OPENROUTER_API_KEY);
 
         // For demo purposes, if no API key, return mock response
         if (!process.env.OPENROUTER_API_KEY) {
@@ -35,31 +35,48 @@ app.post('/api/chat', async (req, res) => {
             });
         }
 
-        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-            method: "POST",
+        // Using fetch for OpenRouter API
+        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
             headers: {
-                Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-                "Content-Type": "application/json",
-                "HTTP-Referer": "http://localhost:3000",
-                "X-Title": "EchoMind AI"
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                'HTTP-Referer': 'http://localhost:3000',
+                'X-Title': 'EchoMind AI'
             },
             body: JSON.stringify({
-                model: "openai/gpt-4o-mini",
+                model: 'openai/gpt-4o', // You can change this to any model OpenRouter supports
                 messages: [
                     {
                         role: "system",
-                        content: `User emotion: ${emotion}. Respond empathetically in a helpful, professional manner.`
+                        content: `You are an empathetic AI emotional assistant. The user's current emotional state is: ${emotion}. Respond in a warm, helpful manner that matches their emotional tone. Keep responses concise but meaningful (1-3 sentences).`
                     },
                     {
                         role: "user",
                         content: message
                     }
-                ]
+                ],
+                temperature: 0.7,
+                max_tokens: 150
             })
         });
 
+        if (!response.ok) {
+            const errorData = await response.text();
+            console.error('OpenRouter API error:', response.status, errorData);
+            throw new Error(`OpenRouter API error: ${response.status}`);
+        }
+
         const data = await response.json();
-        res.json(data);
+        
+        // Format response to match expected structure
+        res.json({
+            choices: [{
+                message: {
+                    content: data.choices[0].message.content
+                }
+            }]
+        });
 
     } catch (error) {
         console.error("SERVER ERROR:", error);
@@ -122,6 +139,7 @@ app.listen(port, () => {
     console.log(`🚀 EchoMind AI Server running on http://localhost:${port}`);
     console.log(`📁 Serving static files from: ${path.join(__dirname, 'public')}`);
     console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🤖 Using OpenRouter API for AI responses`);
 });
 
 // Handle process termination
