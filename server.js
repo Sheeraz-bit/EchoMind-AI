@@ -134,6 +134,23 @@ function getMockResponse(message, emotion) {
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+// Serve manifest.json with correct MIME type
+app.get('/manifest.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/manifest+json');
+    res.sendFile(path.join(__dirname, 'public', 'manifest.json'));
+});
+
+// Serve service worker with correct MIME type
+app.get('/sw.js', (req, res) => {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.setHeader('Service-Worker-Allowed', '/');
+    res.sendFile(path.join(__dirname, 'public', 'sw.js'));
+});
+
+// Serve offline page
+app.get('/offline.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'offline.html'));
+});
 
 app.listen(port, () => {
     console.log(`🚀 EchoMind AI Server running on http://localhost:${port}`);

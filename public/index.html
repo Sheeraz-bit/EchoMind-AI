@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/fevicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/fevicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/fevicon/favicon-16x16.png">
-    <link rel="manifest" href="../assets/fevicon/site.webmanifest">
+    <link rel="manifest" href="/manifest.json">
     
 </head>
 <body>
@@ -250,7 +250,88 @@
         <div class="footer-info"><i class="fas fa-info-circle"></i> EchoMind AI by<a href="https://link-holder.vercel.app/"> Shaikh Sheeraz </a></div>
     </footer>
 </div>
+<!-- PWA Meta Tags -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="EchoMind AI">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="EchoMind AI">
+<meta name="msapplication-TileColor" content="#1a1a2e">
+<meta name="msapplication-tap-highlight" content="no">
 
+<!-- iOS icons -->
+<link rel="apple-touch-icon" href="/assets/fevicon/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/assets/fevicon/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/fevicon/apple-touch-icon.png">
+
+<!-- Android Chrome icons -->
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/fevicon/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/fevicon/android-chrome-512x512.png">
+
+<!-- Service Worker Registration -->
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('✅ Service Worker registered successfully:', registration.scope);
+                    
+                    // Check for updates every hour
+                    setInterval(() => {
+                        registration.update();
+                    }, 60 * 60 * 1000);
+                })
+                .catch(error => {
+                    console.error('❌ Service Worker registration failed:', error);
+                });
+        });
+    }
+    
+    // PWA Installation prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Show install button (optional)
+        console.log('📱 PWA can be installed');
+        
+        // You can show a custom install button
+        const installBanner = document.createElement('div');
+        installBanner.className = 'install-banner';
+        installBanner.innerHTML = `
+            <div class="install-banner-content">
+                <span>📱 Install EchoMind AI</span>
+                <button id="installPWA" class="install-btn">Install App</button>
+                <button id="closeInstall" class="close-install">×</button>
+            </div>
+        `;
+        document.body.appendChild(installBanner);
+        
+        document.getElementById('installPWA')?.addEventListener('click', () => {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('✅ User accepted the install prompt');
+                }
+                deferredPrompt = null;
+                installBanner.remove();
+            });
+        });
+        
+        document.getElementById('closeInstall')?.addEventListener('click', () => {
+            installBanner.remove();
+        });
+    });
+    
+    // Handle app installed event
+    window.addEventListener('appinstalled', (evt) => {
+        console.log('🎉 EchoMind AI was installed');
+        // Send analytics or show thank you message
+    });
+</script>
 <script src="script.js"></script>
 </body>
 </html>

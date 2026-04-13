@@ -1186,3 +1186,138 @@ function suggestTopic() {
     // Highlight that this will trigger emotion detection
     addMessageToChat(`💡 Try sending: "${randomTopic}" - I'll detect the emotion from your words!`, 'ai');
 }
+// PWA Offline Detection - FIXED VERSION
+let isOnline = navigator.onLine;
+let isAppOffline = false;
+let offlineMessagesQueue = [];
+
+function updateOfflineStatus() {
+    isOnline = navigator.onLine;
+    isAppOffline = !isOnline;
+    
+    let indicator = document.getElementById('offlineIndicator');
+    if (!indicator) {
+        indicator = document.createElement('div');
+        indicator.id = 'offlineIndicator';
+        indicator.className = 'offline-indicator';
+        indicator.innerHTML = '⚠️ You are offline. Messages will be saved locally.';
+        document.body.appendChild(indicator);
+    }
+    
+    if (isAppOffline) {
+        indicator.classList.add('show');
+        console.log('🔴 App is offline - using local responses');
+    } else {
+        indicator.classList.remove('show');
+        console.log('🟢 App is online');
+        syncPendingMessages();
+    }
+}
+
+function queueOfflineMessage(message, emotion) {
+    offlineMessagesQueue.push({ message, emotion, timestamp: Date.now() });
+    localStorage.setItem('offlineMessagesQueue', JSON.stringify(offlineMessagesQueue));
+}
+
+async function syncPendingMessages() {
+    const stored = localStorage.getItem('offlineMessagesQueue');
+    if (stored) {
+        const pending = JSON.parse(stored);
+        if (pending.length > 0) {
+            console.log(`🔄 Syncing ${pending.length} pending messages`);
+            for (const msg of pending) {
+                try {
+                    await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: msg.message, emotion: msg.emotion })
+                    });
+                } catch (e) {
+                    console.error('Failed to sync message:', e);
+                }
+            }
+            localStorage.removeItem('offlineMessagesQueue');
+            offlineMessagesQueue = [];
+        }
+    }
+}
+
+// Store the original sendMessage
+const originalSendMessage = sendMessage;
+
+// Create enhanced sendMessage with offline support
+window.enhancedSendMessage = async function() {
+    if (!userInput || !chatMessages) return;
+    
+    const message = userInput.value.trim();
+    if (!message) return;
+    
+    if (isAppOffline) {
+        // Offline mode - use local responses only
+        const detectedEmotion = detectTextEmotion(message);
+        setEmotion(detectedEmotion.emotion, detectedEmotion.confidence);
+        addMessageToChat(message, 'user');
+        userInput.value = '';
+        
+        queueOfflineMessage(message, detectedEmotion.emotion);
+        
+        setTimeout(() => {
+            const localResponse = getEnhancedResponse(message, currentEmotion);
+            addMessageToChat(localResponse + ' (💾 Saved - will sync when online)', 'ai');
+            
+            if (isMobileDevice()) {
+                mobileSafeSpeak(localResponse);
+            } else {
+                speakResponse(localResponse);
+            }
+        }, 300);
+    } else {
+        // Online mode - use original function
+        await originalSendMessage();
+    }
+};
+
+// Replace the sendMessage function
+window.sendMessage = window.enhancedSendMessage;
+
+// Update button event listeners to use new function
+if (sendButton) {
+    sendButton.removeEventListener('click', window.enhancedSendMessage);
+    sendButton.addEventListener('click', () => window.enhancedSendMessage());
+}
+if (sendButtonInside) {
+    sendButtonInside.removeEventListener('click', window.enhancedSendMessage);
+    sendButtonInside.addEventListener('click', () => window.enhancedSendMessage());
+}
+
+// Listen for online/offline events
+window.addEventListener('online', updateOfflineStatus);
+window.addEventListener('offline', updateOfflineStatus);
+
+// Initialize
+updateOfflineStatus();
+// Request notification permission for PWA
+async function requestNotificationPermission() {
+    if ('Notification' in window) {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+            console.log('✅ Notifications enabled');
+            
+            // Register for push notifications if service worker is ready
+            if ('serviceWorker' in navigator && 'PushManager' in window) {
+                const registration = await navigator.serviceWorker.ready;
+                // Subscribe to push (you'll need a VAPID key for production)
+                console.log('🔔 Push notifications ready');
+            }
+        }
+    }
+}
+
+// Call this after service worker registration
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then(() => {
+            setTimeout(requestNotificationPermission, 3000);
+        });
+    });
+}
